@@ -1,0 +1,1 @@
+<div id="lang" class="lang ${sessionScope.locale}" onclick="changeLanguage()"></div>

@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+.site-content {
+    min-height: 100%;
+    box-sizing: border-box;
+    padding-bottom: 200px;
+}
+
+footer {
+    margin-top: -200px;
+    height: 200px;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.test-img {
+    margin: 15px;
+    max-width: 100px;
+    height: auto;
+}
+
+header .btn-group > * {
+    margin:0 5px;
+}
+
+header, #theme {
+    margin-bottom: 20px;
+}
+
+.login-form {
+    margin-top: 200px;
+}
+
+.result-fail {
+    color: #ff0000;
+}
+
+.result-success {
+    color: #28a745;
+}
+
+.error {
+    text-align:center;
+}
+
+.error h1{
+    font-size: 13em;
+    color: #555555;
+    margin:0.4em 0 0;
+    line-height: 1;
+}
+.error h2{
+    font-size: 1em;
+    color: #555555;
+    text-transform: capitalize;
+}
+
+.error a {
+    display: inline-block;
+    margin:3em 0;
+    padding: 8px 70px;
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+    border-radius: .25rem;
+    font-size: 1em;
+    transition:.5s ease-in;
+}
+.error a:hover{
+    text-decoration: none;
+    background:#fff;
+    color:#212121;
+}
+
+.create-question-button, .create-answer-button {
+    margin: 15px;
+}
+
+#editorWarn {
+    padding-bottom: 15px;
+}
+
+.lang, .lang::after {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    position: absolute;
+    right: 1%;
+    top: 1%;
+    content:'';
+}
+
+.lang::after {
+    background-size: 200% 100%;
+    transition: transform 1s linear 0s, background-position 0ms linear 500ms;
+    background-image: url("../images/flags.png");
+}
+
+.lang.en::after, .lang.ru:hover::after {
+    background-position-x: 0;
+}
+
+.lang.ru::after, .lang.en:hover::after {
+    background-position-x:-100%;
+}
+
+.lang:hover::after {
+    transform: rotateY(180deg);
+}
