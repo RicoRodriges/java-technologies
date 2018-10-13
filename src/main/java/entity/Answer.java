@@ -2,9 +2,13 @@ package entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+@Data
+@NoArgsConstructor
 public class Answer implements Serializable {
     @JsonIgnore
     private long id;
@@ -19,47 +23,5 @@ public class Answer implements Serializable {
         this.text = text;
         this.isRight = isRight;
         this.questionId = questionId;
-    }
-
-    public Answer() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(long questionId) {
-        this.questionId = questionId;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Boolean getRight() {
-        return isRight;
-    }
-
-    public void setRight(Boolean right) {
-        isRight = right;
-    }
-
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "text='" + text + '\'' +
-                '}';
     }
 }

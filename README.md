@@ -10,3 +10,4 @@ Tools:
 * H2 database
 * Log4J
 * JBCrypt
+* Lombok

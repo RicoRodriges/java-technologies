@@ -54,9 +54,9 @@ public class TestResultServiceImplTest {
         when(question.getAnswers()).thenReturn(Arrays.asList(answerCorrect, answerIncorrect));
         when(question.getId()).thenReturn(1L);
         when(answerCorrect.getId()).thenReturn(1L);
-        when(answerCorrect.getRight()).thenReturn(true);
+        when(answerCorrect.getIsRight()).thenReturn(true);
         when(answerIncorrect.getId()).thenReturn(2L);
-        when(answerIncorrect.getRight()).thenReturn(false);
+        when(answerIncorrect.getIsRight()).thenReturn(false);
         when(user.getId()).thenReturn(1L);
 
         HashMap<Long, List<Long>> answers = new HashMap<>();

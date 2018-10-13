@@ -51,7 +51,7 @@ public class TestResultServiceImpl implements TestResultService {
         boolean isCorrect = true;
         for (Answer a : q.getAnswers()) {
             boolean isChecked = answerIds.contains(a.getId());
-            if (a.getRight() && !isChecked || !a.getRight() && isChecked) {
+            if (a.getIsRight() && !isChecked || !a.getIsRight() && isChecked) {
                 isCorrect = false;
                 break;
             }

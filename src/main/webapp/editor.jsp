@@ -114,10 +114,10 @@
                                         </div>
                                         <div class="form-check">
                                             <label class="form-check-label">
-                                                <c:if test="${a.getRight()}">
+                                                <c:if test="${a.getIsRight()}">
                                                     <input class="form-check-input" type="checkbox" checked>
                                                 </c:if>
-                                                <c:if test="${not a.getRight()}">
+                                                <c:if test="${not a.getIsRight()}">
                                                     <input class="form-check-input" type="checkbox">
                                                 </c:if>
                                                 <fmt:message key="testeditor.isrightanswer"/>

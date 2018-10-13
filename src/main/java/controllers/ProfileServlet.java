@@ -38,7 +38,7 @@ public class ProfileServlet extends HttpServlet {
             user = (User) session.getAttribute(USER);
             doPostTestResults(req, resp, user);
         } else {
-            if (((User) session.getAttribute(USER)).getTutor()) {
+            if (((User) session.getAttribute(USER)).getIsTutor()) {
                 user = new UserServiceImpl().get(req.getParameter(USER));
                 doPostTestResults(req, resp, user);
             } else {

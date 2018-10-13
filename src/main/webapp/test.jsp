@@ -18,7 +18,7 @@
             <c:set var="qNumber" value="${qNumber+1}"/>
             <c:set var="correctAnswers" value="0"/>
             <c:forEach items="${q.getAnswers()}" var="a">
-                <c:if test="${a.getRight()}">
+                <c:if test="${a.getIsRight()}">
                     <c:set var="correctAnswers" value="${correctAnswers+1}"/>
                 </c:if>
             </c:forEach>

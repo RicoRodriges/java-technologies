@@ -43,7 +43,7 @@ public class AnswerServiceImpl implements AnswerService {
             if (sameText(answer, text, a)) {
                 return false;
             }
-            if (a.getRight()) {
+            if (a.getIsRight()) {
                 hasRightAnswer = true;
             }
         }

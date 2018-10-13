@@ -220,7 +220,7 @@ public class AnswerDAO extends AbstractDAO<Answer, Long> {
 
     private void setSQLParameters(Answer answer, PreparedStatement st) throws SQLException {
         st.setString(1, answer.getText());
-        st.setBoolean(2, answer.getRight());
+        st.setBoolean(2, answer.getIsRight());
         st.setLong(3, answer.getQuestionId());
     }
 

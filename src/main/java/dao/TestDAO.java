@@ -216,7 +216,9 @@ public class TestDAO extends AbstractDAO<Test, Long> {
 
         Test test = new Test(name, questionList, type);
         test.setId(id);
-        test.setCreationDate(creationDate);
+        if (creationDate != null) {
+            test.setCreationDate(creationDate.toLocalDate());
+        }
         return test;
     }
 }

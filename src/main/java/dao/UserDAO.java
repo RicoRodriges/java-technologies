@@ -149,7 +149,7 @@ public class UserDAO extends AbstractDAO<User, Long> {
     private void setSQLParameters(User entity, PreparedStatement st) throws SQLException {
         st.setString(1, entity.getName());
         st.setString(2, entity.getPassword());
-        st.setBoolean(3, entity.getTutor());
+        st.setBoolean(3, entity.getIsTutor());
     }
 
     private User getUserById(Long id, ResultSet rs) throws SQLException {

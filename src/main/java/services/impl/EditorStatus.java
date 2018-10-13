@@ -1,5 +1,10 @@
 package services.impl;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum EditorStatus {
     TEST_EXISTS("TEST_EXISTS"),
     TEST_NO_NAME("TEST_NO_NAME"),
@@ -12,12 +17,4 @@ public enum EditorStatus {
     OK("OK");
 
     private String type;
-
-    EditorStatus(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
 }

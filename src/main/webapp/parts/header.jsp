@@ -12,7 +12,7 @@
                     </div>
 
                     <c:choose>
-                    <c:when test="${sessionScope.user.getTutor()}">
+                    <c:when test="${sessionScope.user.getIsTutor()}">
 
                         <div class="btn-group">
                             <div><a href="/editor.jsp" class="btn btn-primary">

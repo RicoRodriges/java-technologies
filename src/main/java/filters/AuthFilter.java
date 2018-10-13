@@ -35,7 +35,7 @@ public class AuthFilter implements Filter {
             User user;
             if (session != null && (user = (User) session.getAttribute(USER)) != null) {
                 if (isTutorPages(uri)) {
-                    if (user.getTutor()) {
+                    if (user.getIsTutor()) {
                         chain.doFilter(request, response);
                     } else {
                         ((HttpServletResponse) response).sendRedirect(FORBIDDEN_JSP);
