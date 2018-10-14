@@ -2,14 +2,18 @@ package services.impl;
 
 import dao.UserDAO;
 import entity.User;
+import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.stereotype.Service;
 import services.api.UserService;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private static final UserDAO userDAO = new UserDAO();
+    private final UserDAO userDAO;
 
     @Override
     public boolean isAlreadyExists(User user) {

@@ -1,21 +1,14 @@
 package dao;
 
 import config.ConnectionPool;
+import lombok.RequiredArgsConstructor;
 
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+@RequiredArgsConstructor
 public abstract class AbstractDAO<E, K> {
-    protected ResourceBundle sqlQueries = ResourceBundle.getBundle("sql_queries_dao");
-    protected ConnectionPool pool;
-
-    {
-        try {
-            pool = ConnectionPool.getInstance();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    protected final ResourceBundle sqlQueries = ResourceBundle.getBundle("sql_queries_dao");
+    protected final ConnectionPool pool;
 
     public abstract E add(E entity);
 

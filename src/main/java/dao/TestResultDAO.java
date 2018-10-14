@@ -4,12 +4,14 @@ import config.ConnectionPool;
 import entity.TestResult;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class TestResultDAO extends AbstractDAO<TestResult, Long> {
 
     private final static Logger log = LogManager.getLogger(TestResultDAO.class);
@@ -19,6 +21,10 @@ public class TestResultDAO extends AbstractDAO<TestResult, Long> {
     private final static String CORRECTANSWERS = "correctAnswers";
     private final static String COUNTANSWERS = "countAnswers";
     private final static String DATE = "date";
+
+    public TestResultDAO(ConnectionPool pool) {
+        super(pool);
+    }
 
     @Override
     public TestResult add(TestResult testResult) {
@@ -158,7 +164,7 @@ public class TestResultDAO extends AbstractDAO<TestResult, Long> {
 
     private void freeCon(Connection con) {
         try {
-            ConnectionPool.freeConnection(con);
+            pool.freeConnection(con);
         } catch (SQLException e) {
             throw new RuntimeException();
         }

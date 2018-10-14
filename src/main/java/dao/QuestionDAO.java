@@ -5,6 +5,7 @@ import entity.Answer;
 import entity.Question;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,9 +14,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class QuestionDAO extends AbstractDAO<Question, Long> {
 
     private final static Logger log = LogManager.getLogger(QuestionDAO.class);
+
+    public QuestionDAO(ConnectionPool pool) {
+        super(pool);
+    }
 
     @Override
     public Question add(Question question) {
@@ -52,7 +58,7 @@ public class QuestionDAO extends AbstractDAO<Question, Long> {
             ) {
                 if (rs.next()) {
                     return rs.getLong(1);
-                } else{
+                } else {
                     return -1;
                 }
             } catch (SQLException e) {
@@ -187,7 +193,7 @@ public class QuestionDAO extends AbstractDAO<Question, Long> {
 
     private void freeCon(Connection con) {
         try {
-            ConnectionPool.freeConnection(con);
+            pool.freeConnection(con);
         } catch (SQLException e) {
             throw new RuntimeException();
         }

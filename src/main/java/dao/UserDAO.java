@@ -4,6 +4,7 @@ import config.ConnectionPool;
 import entity.User;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,9 +13,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserDAO extends AbstractDAO<User, Long> {
 
     private final static Logger log = LogManager.getLogger(UserDAO.class);
+
+    public UserDAO(ConnectionPool pool) {
+        super(pool);
+    }
 
     @Override
     public User add(User entity) {
@@ -140,7 +146,7 @@ public class UserDAO extends AbstractDAO<User, Long> {
 
     private void freeCon(Connection con) {
         try {
-            ConnectionPool.freeConnection(con);
+            pool.freeConnection(con);
         } catch (SQLException e) {
             throw new RuntimeException();
         }
@@ -161,7 +167,7 @@ public class UserDAO extends AbstractDAO<User, Long> {
         return user;
     }
 
-    private User getUserByName(String name, ResultSet rs) throws SQLException  {
+    private User getUserByName(String name, ResultSet rs) throws SQLException {
         long id = rs.getLong("id");
         String pass = rs.getString("pass");
         boolean tutor = rs.getBoolean("isTutor");

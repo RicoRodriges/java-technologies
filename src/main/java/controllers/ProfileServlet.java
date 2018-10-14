@@ -2,57 +2,59 @@ package controllers;
 
 import entity.TestResult;
 import entity.User;
-import services.impl.TestResultServiceImpl;
-import services.impl.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import services.api.TestResultService;
+import services.api.UserService;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-@WebServlet("/profileServlet")
-public class ProfileServlet extends HttpServlet {
+@Controller
+@RequestMapping("/profileServlet")
+@RequiredArgsConstructor
+public class ProfileServlet {
 
-    private static final String PROFILE_JSP = "/profile.jsp";
+    private static final String PROFILE_JSP = "profile";
     private static final String USER = "user";
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        req.getRequestDispatcher(PROFILE_JSP).forward(req, resp);
+    private final UserService userService;
+    private final TestResultService testResultService;
+
+    @PostMapping
+    protected String doPost() {
+        return PROFILE_JSP;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        HttpSession session = req.getSession();
+    @GetMapping
+    protected String doGet(@RequestParam(name = USER, required = false) String username,
+                           HttpSession session,
+                           Model model) {
         User user;
-        if (req.getParameter(USER) == null) {
+        if (username == null) {
             user = (User) session.getAttribute(USER);
-            doPostTestResults(req, resp, user);
+            return doPostTestResults(user, model);
         } else {
             if (((User) session.getAttribute(USER)).getIsTutor()) {
-                user = new UserServiceImpl().get(req.getParameter(USER));
-                doPostTestResults(req, resp, user);
+                user = userService.get(username);
+                return doPostTestResults(user, model);
             } else {
-                req.getRequestDispatcher("forbidden.jsp").forward(req, resp);
+                return "forbidden";
             }
         }
     }
 
-    private void doPostTestResults(HttpServletRequest req, HttpServletResponse resp, User user) throws ServletException, IOException {
-        List<TestResult> testResults = new TestResultServiceImpl()
-                .getAllTestResultsByUserId(user.getId());
+    private String doPostTestResults(User user, Model model) {
+        List<TestResult> testResults = testResultService.getAllTestResultsByUserId(user.getId());
         Collections.reverse(testResults);
-        req.setAttribute("testResults", testResults);
-        doPost(req, resp);
+        model.addAttribute("testResults", testResults);
+        return doPost();
     }
 }
 

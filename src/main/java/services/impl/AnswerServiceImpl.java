@@ -2,12 +2,17 @@ package services.impl;
 
 import dao.AnswerDAO;
 import entity.Answer;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import services.api.AnswerService;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class AnswerServiceImpl implements AnswerService {
-    private AnswerDAO answerDAO = new AnswerDAO();
+
+    private final AnswerDAO answerDAO;
 
     @Override
     public Answer add(Answer answer) {
@@ -21,7 +26,6 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public List<Answer> getAllAnswersByQuestionId(long questionId) {
-
         return answerDAO.getAllAnswersByQuestionId(questionId);
     }
 

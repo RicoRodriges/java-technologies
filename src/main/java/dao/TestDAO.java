@@ -6,12 +6,14 @@ import entity.Test;
 import entity.TestTypes;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class TestDAO extends AbstractDAO<Test, Long> {
 
     private final static Logger log = LogManager.getLogger(TestDAO.class);
@@ -19,7 +21,13 @@ public class TestDAO extends AbstractDAO<Test, Long> {
     private final static String NAME = "name";
     private final static String TYPE = "type";
     private final static String DATE = "creationDate";
-    private final static LocalDate DATE_NOW = LocalDate.now();
+
+    private final QuestionDAO questionDAO;
+
+    public TestDAO(ConnectionPool pool, QuestionDAO questionDAO) {
+        super(pool);
+        this.questionDAO = questionDAO;
+    }
 
     @Override
     public Test add(Test test) {
@@ -56,7 +64,7 @@ public class TestDAO extends AbstractDAO<Test, Long> {
             ) {
                 if (rs.next()) {
                     return rs.getLong(1);
-                } else{
+                } else {
                     return -1;
                 }
             } catch (SQLException e) {
@@ -194,7 +202,7 @@ public class TestDAO extends AbstractDAO<Test, Long> {
 
     private void freeCon(Connection con) {
         try {
-            ConnectionPool.freeConnection(con);
+            pool.freeConnection(con);
         } catch (SQLException e) {
             throw new RuntimeException();
         }
@@ -203,7 +211,7 @@ public class TestDAO extends AbstractDAO<Test, Long> {
     private void setSQLParameters(Test test, PreparedStatement st) throws SQLException {
         st.setString(1, test.getName());
         st.setString(2, test.getType().getName());
-        st.setDate(3, Date.valueOf(DATE_NOW));
+        st.setDate(3, Date.valueOf(LocalDate.now()));
     }
 
     private Test getTestById(Long id, ResultSet rs) throws SQLException {
@@ -211,8 +219,7 @@ public class TestDAO extends AbstractDAO<Test, Long> {
         TestTypes type = TestTypes.getType(rs.getString(TYPE));
         Date creationDate = rs.getDate(DATE);
 
-        QuestionDAO help = new QuestionDAO();
-        List<Question> questionList = help.getAllQuestionsByTestId(id);
+        List<Question> questionList = questionDAO.getAllQuestionsByTestId(id);
 
         Test test = new Test(name, questionList, type);
         test.setId(id);

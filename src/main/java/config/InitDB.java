@@ -1,16 +1,19 @@
 package config;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import javax.annotation.PostConstruct;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
-public class InitDB extends HttpServlet {
+@Component
+@RequiredArgsConstructor
+public class InitDB {
 
     private final static Logger log = LogManager.getLogger(InitDB.class);
     private static final String SQL_QUERIES = "sql_queries";
@@ -21,13 +24,13 @@ public class InitDB extends HttpServlet {
     private static final String H2_CREATE_TESTRESULT = "h2.create.testresult";
     private static final String H2_CREATE_USER_TUTOR = "h2.create.user.tutor";
 
-    @Override
-    public void init() throws ServletException {
-        super.init();
+    private final ConnectionPool pool;
+
+    @PostConstruct
+    public void init() {
         Statement st = null;
         Connection con = null;
         try {
-            ConnectionPool pool = ConnectionPool.getInstance();
             con = pool.getConnection();
             ResourceBundle res = ResourceBundle.getBundle(SQL_QUERIES);
             String[] sqls = {res.getString(H2_CREATE_USER),
@@ -49,7 +52,7 @@ public class InitDB extends HttpServlet {
                 if (st != null)
                     st.close();
                 if (con != null)
-                    ConnectionPool.freeConnection(con);
+                    pool.freeConnection(con);
             } catch (SQLException e) {
                 log.error("Database didn't initialize", e);
             }

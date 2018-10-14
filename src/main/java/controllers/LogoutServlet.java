@@ -1,34 +1,28 @@
 package controllers;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
-@WebServlet("/logoutServlet")
-public class LogoutServlet extends HttpServlet {
+@Controller
+@RequestMapping("/logoutServlet")
+public class LogoutServlet {
 
+    private static final String LOGIN_JSP = "login";
 
-    private static final String LOGIN_JSP = "/login.jsp";
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        HttpSession session = req.getSession(false);
+    @PostMapping
+    protected String doPost(HttpSession session) {
         if (session != null) {
             session.invalidate();
         }
-        req.getRequestDispatcher(LOGIN_JSP).forward(req, resp);
+        return LOGIN_JSP;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        doPost(req, resp);
+    @GetMapping
+    protected String doGet(HttpSession session) {
+        return doPost(session);
     }
 }

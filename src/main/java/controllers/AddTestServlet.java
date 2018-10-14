@@ -2,43 +2,42 @@ package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.Test;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import services.api.TestService;
 import services.impl.EditorStatus;
-import services.impl.TestServiceImpl;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/addTest")
-public class AddTestServlet extends HttpServlet {
-
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/addTest")
+public class AddTestServlet {
     private static final String TEST = "test";
-    private static final TestService testService = new TestServiceImpl();
     private static final String PROBLEM = "problem";
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        String test = req.getParameter(TEST);
+    private final TestService testService;
+    private final ObjectMapper mapper;
+
+    @PostMapping
+    protected String doPost(@RequestParam(TEST) String test, Model model) throws IOException {
         Test newTest = convertJson(test);
         EditorStatus result = createNewTest(newTest);
-        if(result == EditorStatus.OK){
-            resp.sendRedirect("/catalog");
+        if (result == EditorStatus.OK) {
+            return "redirect:/catalog";
         } else {
             newTest.setId(-1);
-            req.setAttribute(TEST, newTest);
-            req.setAttribute(PROBLEM, result.getType());
-            req.getRequestDispatcher("/editor.jsp").forward(req, resp);
+            model.addAttribute(TEST, newTest);
+            model.addAttribute(PROBLEM, result.getType());
+            return "editor";
         }
     }
 
     private Test convertJson(String test) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(test, Test.class);
     }
 

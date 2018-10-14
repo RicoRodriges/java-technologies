@@ -2,14 +2,19 @@ package services.impl;
 
 import dao.TestResultDAO;
 import entity.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import services.api.TestResultService;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+@Service
+@RequiredArgsConstructor
 public class TestResultServiceImpl implements TestResultService {
-    private TestResultDAO testResultDAO = new TestResultDAO();
+
+    private final TestResultDAO testResultDAO;
 
     @Override
     public void add(TestResult testResult) {

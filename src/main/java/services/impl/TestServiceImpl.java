@@ -4,6 +4,8 @@ import dao.TestDAO;
 import entity.Answer;
 import entity.Question;
 import entity.Test;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import services.api.AnswerService;
 import services.api.QuestionService;
 import services.api.TestService;
@@ -12,11 +14,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
+@RequiredArgsConstructor
 public class TestServiceImpl implements TestService {
 
-    private TestDAO testDAO = new TestDAO();
-    private static final QuestionService questionService = new QuestionServiceImpl();
-    private static final AnswerService answerService = new AnswerServiceImpl();
+    private final TestDAO testDAO;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
 
     @Override
     public Test addTest(Test test) {
@@ -44,7 +48,7 @@ public class TestServiceImpl implements TestService {
     @Override
     public void removeTest(Long id) {
         testDAO.remove(id);
-        new QuestionServiceImpl().removeAllQuestionsByTestId(id);
+        questionService.removeAllQuestionsByTestId(id);
     }
 
     @Override

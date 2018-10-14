@@ -3,18 +3,23 @@ package services.impl;
 import dao.QuestionDAO;
 import entity.Answer;
 import entity.Question;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import services.api.AnswerService;
 import services.api.QuestionService;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
-    private QuestionDAO questionDAO = new QuestionDAO();
+
+    private final QuestionDAO questionDAO;
+    private final AnswerService answerService;
 
     @Override
     public Question add(Question question) {
         Question quest = questionDAO.add(question);
-        AnswerService answerService = new AnswerServiceImpl();
         for (Answer a : question.getAnswers()) {
             answerService.add(a);
         }
@@ -34,7 +39,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void remove(long id) {
         questionDAO.remove(id);
-        new AnswerServiceImpl().removeAllAnswersByQuestionId(id);
+        answerService.removeAllAnswersByQuestionId(id);
     }
 
     @Override

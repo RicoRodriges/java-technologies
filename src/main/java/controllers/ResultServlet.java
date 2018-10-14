@@ -4,40 +4,42 @@ import entity.Question;
 import entity.Test;
 import entity.TestResult;
 import entity.User;
+import lombok.RequiredArgsConstructor;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import services.api.TestResultService;
-import services.impl.TestResultServiceImpl;
-import services.impl.TestServiceImpl;
+import services.api.TestService;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@WebServlet("/result")
-public class ResultServlet extends HttpServlet {
+@Controller
+@RequestMapping("/result")
+@RequiredArgsConstructor
+public class ResultServlet {
 
     private final static Logger log = LogManager.getLogger(ResultServlet.class);
     private static final String RESULT = "result";
     private static final String TEST = "test";
     private static final String SCORE = "score";
-    private static final String RESULT_JSP = "result.jsp";
+    private static final String RESULT_JSP = "result";
     private static final String TEST_ID = "testId";
     private static final String CATALOG = "/catalog";
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        TestServiceImpl testService = new TestServiceImpl();
+    private final TestService testService;
+    private final TestResultService testResultService;
+
+    @PostMapping
+    protected String doPost(HttpServletRequest req, Model model) {
         Test test = testService.getTest(Long.parseLong(req.getParameter(TEST_ID)));
         Map<Long, List<Long>> answers = new HashMap<>();
         for (Question q : test.getQuest()) {
@@ -49,24 +51,22 @@ public class ResultServlet extends HttpServlet {
                 answers.put(q.getId(), answerList);
             }
         }
-        TestResultService testResultService = new TestResultServiceImpl();
         TestResult result = testResultService.CheckTest(test, answers, (User) req.getSession().getAttribute("user"));
         testResultService.add(result);
         int score = testResultService.getScore(result);
 
-        req.setAttribute(RESULT, result);
-        req.setAttribute(TEST, test);
-        req.setAttribute(SCORE, score);
-        req.getRequestDispatcher(RESULT_JSP).forward(req, resp);
         log.info("Test " + test + " was solved. " +
                 "Score: " + score + ". " +
                 "Correct answers: " + result.getCorrectAnswers() + "/" + result.getCountAnswers() + ".");
+
+        model.addAttribute(RESULT, result);
+        model.addAttribute(TEST, test);
+        model.addAttribute(SCORE, score);
+        return RESULT_JSP;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        resp.sendRedirect(CATALOG);
+    @GetMapping
+    protected String doGet() {
+        return "redirect:" + CATALOG;
     }
 }

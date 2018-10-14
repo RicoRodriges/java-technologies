@@ -1,80 +1,57 @@
 package controllers;
 
 import entity.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import services.api.UserService;
-import services.impl.UserServiceImpl;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-@WebServlet("/loginServlet")
-public class LoginServlet extends HttpServlet {
+@Controller
+@RequestMapping("/loginServlet")
+@RequiredArgsConstructor
+public class LoginServlet {
 
     private static final String USER = "user";
     private static final String PASSWORD = "password";
     private static final String CATALOG = "/catalog";
-    private static final String LOGIN_JSP = "login.jsp";
+    private static final String LOGIN_JSP = "login";
     private static final String FLAG = "flag";
 
+    private final UserService userService;
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        String credentialsUser = req.getParameter(USER);
-        String credentialsPassword = req.getParameter(PASSWORD);
-
-        authorizeUser(req,
-                resp,
-                new UserServiceImpl(),
-                credentialsUser,
-                credentialsPassword);
-
-
-    }
-
-    private void authorizeUser(HttpServletRequest req, HttpServletResponse resp, UserService validator, String name, String pass)
-            throws ServletException, IOException {
-
-        User user = validator.authorizeUser(name, pass);
-        HttpSession session = req.getSession();
-        Locale locale;
+    @PostMapping
+    protected String doPost(@RequestParam(USER) String name,
+                            @RequestParam(PASSWORD) String pass,
+                            HttpSession session,
+                            Model model) {
+        User user = userService.authorizeUser(name, pass);
 
         String language = (String) session.getAttribute("locale");
         if (language == null) {
             language = "en";
         }
-        req.setAttribute("locale", language);
-        locale = new Locale(language);
+        model.addAttribute("locale", language);
+        Locale locale = new Locale(language);
         ResourceBundle r = ResourceBundle.getBundle("internationalization", locale);
         if (user != null) {
-
             session.setAttribute(USER, user);
-
-            resp.sendRedirect(CATALOG);
-
+            return "redirect:" + CATALOG;
         } else {
-            //session.setAttribute(FLAG, "Login/email combination not found");
-            req.setAttribute(FLAG, r.getString("loginservlet.notfound"));
-
-            req.getRequestDispatcher(LOGIN_JSP).forward(req, resp);
+            model.addAttribute(FLAG, r.getString("loginservlet.notfound"));
+            return LOGIN_JSP;
         }
-
     }
 
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        req.getRequestDispatcher(LOGIN_JSP).forward(req, resp);
-
+    @GetMapping
+    protected String doGet() {
+        return LOGIN_JSP;
     }
 }

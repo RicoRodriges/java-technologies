@@ -1,34 +1,34 @@
 package controllers;
 
 import entity.User;
-import services.impl.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import services.api.UserService;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/userListServlet")
-public class UserListServlet extends HttpServlet {
+@Controller
+@RequestMapping("/userListServlet")
+@RequiredArgsConstructor
+public class UserListServlet {
 
-    private static final String USER_LIST_JSP = "/userList.jsp";
+    private static final String USER_LIST_JSP = "userList";
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        List<User> users = new UserServiceImpl().getAll();
-        req.setAttribute("users", users);
-        req.getRequestDispatcher(USER_LIST_JSP).forward(req, resp);
+    private final UserService userService;
+
+    @PostMapping
+    protected String doPost(Model model) {
+        List<User> users = userService.getAll();
+        model.addAttribute("users", users);
+        return USER_LIST_JSP;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        doPost(req, resp);
+    @GetMapping
+    protected String doGet(Model model) {
+        return doPost(model);
     }
 }
