@@ -3,12 +3,10 @@ package config;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ResourceBundle;
 
 @Component
@@ -24,38 +22,20 @@ public class InitDB {
     private static final String H2_CREATE_TESTRESULT = "h2.create.testresult";
     private static final String H2_CREATE_USER_TUTOR = "h2.create.user.tutor";
 
-    private final ConnectionPool pool;
+    private final JdbcTemplate jdbcTemplate;
 
     @PostConstruct
     public void init() {
-        Statement st = null;
-        Connection con = null;
-        try {
-            con = pool.getConnection();
-            ResourceBundle res = ResourceBundle.getBundle(SQL_QUERIES);
-            String[] sqls = {res.getString(H2_CREATE_USER),
-                    res.getString(H2_CREATE_TEST),
-                    res.getString(H2_CREATE_QUESTION),
-                    res.getString(H2_CREATE_ANSWER),
-                    res.getString(H2_CREATE_TESTRESULT),
-                    res.getString(H2_CREATE_USER_TUTOR)};
-            st = con.createStatement();
-            for (String sql : sqls) {
-                st.executeUpdate(sql);
-            }
-            log.info("Database successfully initialized");
-        } catch (SQLException e) {
-            log.error("Database didn't initialize", e);
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (st != null)
-                    st.close();
-                if (con != null)
-                    pool.freeConnection(con);
-            } catch (SQLException e) {
-                log.error("Database didn't initialize", e);
-            }
+        ResourceBundle res = ResourceBundle.getBundle(SQL_QUERIES);
+        String[] sqls = {res.getString(H2_CREATE_USER),
+                res.getString(H2_CREATE_TEST),
+                res.getString(H2_CREATE_QUESTION),
+                res.getString(H2_CREATE_ANSWER),
+                res.getString(H2_CREATE_TESTRESULT),
+                res.getString(H2_CREATE_USER_TUTOR)};
+        for (String sql : sqls) {
+            jdbcTemplate.execute(sql);
         }
+        log.info("Database successfully initialized");
     }
 }

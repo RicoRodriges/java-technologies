@@ -1,14 +1,14 @@
 package dao;
 
-import config.ConnectionPool;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ResourceBundle;
 
 @RequiredArgsConstructor
 public abstract class AbstractDAO<E, K> {
     protected final ResourceBundle sqlQueries = ResourceBundle.getBundle("sql_queries_dao");
-    protected final ConnectionPool pool;
+    protected final JdbcTemplate jdbcTemplate;
 
     public abstract E add(E entity);
 

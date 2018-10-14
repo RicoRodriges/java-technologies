@@ -12,3 +12,4 @@ Tools:
 * JBCrypt
 * Lombok
 * Spring MVC
+* Spring JDBC (`JdbcTemplate`)
