@@ -24,11 +24,9 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public TestDto getTest(Long id) {
-        Test test = testDAO.findById(id);
-        if (test == null) {
-            return null;
-        }
-        return new TestDto(test);
+        return testDAO.findById(id)
+                .map(TestDto::new)
+                .orElse(null);
     }
 
     @Override
