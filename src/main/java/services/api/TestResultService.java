@@ -11,9 +11,7 @@ public interface TestResultService {
 
     void add(TestResult testResult);
 
-    List<TestResult> getAllTestResultsByUserId(long userId);
-
-    void remove(long id);
+    List<TestResult> getAllTestResultsByUserId(Long userId);
 
     TestResult CheckTest(Test test, Map<Long, List<Long>> answers, User user);
 

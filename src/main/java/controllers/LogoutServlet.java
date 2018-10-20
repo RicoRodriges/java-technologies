@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/logoutServlet")
+@RequestMapping("/logout")
 public class LogoutServlet {
 
     private static final String LOGIN_JSP = "login";

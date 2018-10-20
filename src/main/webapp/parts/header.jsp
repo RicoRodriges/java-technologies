@@ -15,23 +15,23 @@
                     <c:when test="${sessionScope.user.getIsTutor()}">
 
                         <div class="btn-group">
-                            <div><a href="/editor.jsp" class="btn btn-primary">
+                            <div><a href="/editor" class="btn btn-primary">
                             <fmt:message key="catalog.createtest"/>
                             </a></div>
-                            <div><a href="/userListServlet" class="btn btn-primary">
+                            <div><a href="/userList" class="btn btn-primary">
                             <fmt:message key="catalog.userspage"/>
                             </a></div>
-                            <div><a href="/logoutServlet" class="btn btn-primary">
+                            <div><a href="/logout" class="btn btn-primary">
                             <fmt:message key="catalog.logout"/>
                             </a></div>
                         </div>
                     </c:when>
                     <c:otherwise>
                         <div class="btn-group">
-                           <div><a href="/profileServlet" class="btn btn-primary">
+                           <div><a href="/profile" class="btn btn-primary">
                            <fmt:message key="catalog.resultpage"/>
                            </a></div>
-                           <div><a href="/logoutServlet" class="btn btn-primary">
+                           <div><a href="/logout" class="btn btn-primary">
                            <fmt:message key="catalog.logout"/>
                            </a></div>
                         </div>

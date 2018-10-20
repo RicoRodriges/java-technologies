@@ -31,11 +31,11 @@ public class TestResultServiceImplTest {
     @Test
     public void getAllTestResultsByUserIdTest() {
         TestResult testResult = mock(TestResult.class);
-        when(testResultDAO.getAllTestResultsByUserId(anyLong())).thenReturn(Collections.singletonList(testResult));
+        when(testResultDAO.findAllByUserId(anyLong())).thenReturn(Collections.singletonList(testResult));
 
-        List<TestResult> allTestResultsByUserId = testResultService.getAllTestResultsByUserId(100);
+        List<TestResult> allTestResultsByUserId = testResultService.getAllTestResultsByUserId(100L);
 
-        verify(testResultDAO).getAllTestResultsByUserId(100);
+        verify(testResultDAO).findAllByUserId(eq(100L));
 
         assertEquals(1, allTestResultsByUserId.size());
         assertEquals(testResult, allTestResultsByUserId.get(0));
@@ -62,13 +62,13 @@ public class TestResultServiceImplTest {
         HashMap<Long, List<Long>> answers = new HashMap<>();
         answers.put(1L, Collections.singletonList(1L));
         TestResult testResult = testResultService.CheckTest(test, answers, user);
-        assertEquals(1, testResult.getCountAnswers());
-        assertEquals(1, testResult.getCorrectAnswers());
+        assertEquals(Integer.valueOf(1), testResult.getCountAnswers());
+        assertEquals(Integer.valueOf(1), testResult.getCorrectAnswers());
 
         answers.replace(1L, Collections.singletonList(2L));
         testResult = testResultService.CheckTest(test, answers, user);
-        assertEquals(1, testResult.getCountAnswers());
-        assertEquals(0, testResult.getCorrectAnswers());
+        assertEquals(Integer.valueOf(1), testResult.getCountAnswers());
+        assertEquals(Integer.valueOf(0), testResult.getCorrectAnswers());
     }
 
 }

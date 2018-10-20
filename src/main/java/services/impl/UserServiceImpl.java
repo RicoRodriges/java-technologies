@@ -17,12 +17,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isAlreadyExists(User user) {
-        return userDAO.get(user.getName()) != null;
+        return userDAO.findByName(user.getName()) != null;
     }
 
     @Override
     public User authorizeUser(String name, String pass) {
-        User u = userDAO.get(name);
+        User u = userDAO.findByName(name);
         if (u != null && BCrypt.checkpw(pass, u.getPassword())) {
             return u;
         }
@@ -32,22 +32,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerUser(User user) {
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-        userDAO.add(user);
-    }
-
-    @Override
-    public User get(long id) {
-        return userDAO.get(id);
+        userDAO.save(user);
     }
 
     @Override
     public User get(String name) {
-        return userDAO.get(name);
+        return userDAO.findByName(name);
     }
 
     @Override
     public List<User> getAll() {
-        return userDAO.getAll();
+        return userDAO.findAll();
     }
 
 

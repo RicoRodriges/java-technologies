@@ -18,17 +18,12 @@ public class TestResultServiceImpl implements TestResultService {
 
     @Override
     public void add(TestResult testResult) {
-        testResultDAO.add(testResult);
+        testResultDAO.save(testResult);
     }
 
     @Override
-    public List<TestResult> getAllTestResultsByUserId(long userId) {
-        return testResultDAO.getAllTestResultsByUserId(userId);
-    }
-
-    @Override
-    public void remove(long id) {
-        testResultDAO.remove(id);
+    public List<TestResult> getAllTestResultsByUserId(Long userId) {
+        return testResultDAO.findAllByUserId(userId);
     }
 
     @Override

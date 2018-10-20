@@ -5,14 +5,6 @@
 <head>
     <%@ include file="parts/head.jsp" %>
 
-    <c:if test="${not empty param.theme}">
-        <c:set var="theme" scope="session" value="${param.theme}"/>
-    </c:if>
-    <c:if test="${empty sessionScope.theme}">
-        <c:set var="theme" scope="session" value="All"/>
-    </c:if>
-    <c:set var="tests" scope="session" value="${f:getAllTestsByTheme(sessionScope.theme)}"/>
-
     <title><fmt:message key="catalog.catalog"/></title>
 </head>
 <body>
@@ -21,23 +13,23 @@
     <fmt:message key="catalog.description" var="headerDesc" />
     <%@ include file="parts/header.jsp" %>
 
-    <select id="theme" onchange="changeTheme()" class="custom-select custom-select-sm col-md-1">
-            <option value="All" ${sessionScope.theme == 'All' ? 'selected' : ''}><fmt:message key="catalog.all"/></option>
-            <option value="English" ${sessionScope.theme == 'English' ? 'selected' : ''}><fmt:message
+    <select id="theme" onchange="changeTheme(this)" class="custom-select custom-select-sm col-md-1">
+            <option value="All" ${requestScope.theme == 'All' ? 'selected' : ''}><fmt:message key="catalog.all"/></option>
+            <option value="English" ${requestScope.theme == 'English' ? 'selected' : ''}><fmt:message
                     key="catalog.english"/></option>
-            <option value="Russian" ${sessionScope.theme == 'Russian' ? 'selected' : ''}><fmt:message
+            <option value="Russian" ${requestScope.theme == 'Russian' ? 'selected' : ''}><fmt:message
                     key="catalog.russian"/></option>
-            <option value="Math" ${sessionScope.theme == 'Math' ? 'selected' : ''}><fmt:message
+            <option value="Math" ${requestScope.theme == 'Math' ? 'selected' : ''}><fmt:message
                     key="catalog.math"/></option>
-            <option value="Physics" ${sessionScope.theme == 'Physics' ? 'selected' : ''}><fmt:message
+            <option value="Physics" ${requestScope.theme == 'Physics' ? 'selected' : ''}><fmt:message
                     key="catalog.physics"/></option>
     </select>
 
 
     <c:choose>
-        <c:when test="${(sessionScope.tests ne null) && (not empty sessionScope.tests)}">
+        <c:when test="${(requestScope.tests ne null) && (not empty requestScope.tests)}">
             <div class="row">
-                <c:forEach items="${sessionScope.tests}" var="test">
+                <c:forEach items="${requestScope.tests}" var="test">
 
                     <c:choose>
                         <c:when test="${test.getType().getName() eq 'Math'}">

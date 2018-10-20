@@ -23,7 +23,7 @@
               <c:forEach items="${requestScope.users}" var="use">
                   <tr>
                   <td>
-                      <a href="profileServlet?user=${use.getName()}">${use.getName()}</a>
+                      <a href="/profile?user=${use.getName()}">${use.getName()}</a>
                   </td>
                   </tr>
               </c:forEach>

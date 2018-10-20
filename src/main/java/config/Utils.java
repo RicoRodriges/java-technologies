@@ -1,6 +1,5 @@
 package config;
 
-import entity.Test;
 import entity.TestResult;
 import org.springframework.stereotype.Component;
 import services.api.TestResultService;
@@ -8,7 +7,6 @@ import services.api.TestService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Component
 public class Utils {
@@ -20,10 +18,6 @@ public class Utils {
         Utils.testResultService = testResultService;
     }
 
-    public static List<Test> getAllTestsByTheme(String theme) {
-        return "All".equals(theme) ? testService.getAllTests() : testService.getAllTestsByTheme(theme);
-    }
-
     public static String getTestName(long testId) {
         return testService.getTest(testId).getName();
     }
@@ -33,7 +27,7 @@ public class Utils {
     }
 
     public static String dateFormat(LocalDateTime localDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLL yyyy HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.LLL.yyyy HH:mm");
         return localDateTime.format(formatter);
     }
 }

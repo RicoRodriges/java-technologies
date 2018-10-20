@@ -1,23 +1,6 @@
 var questionId = 0;
 var answerId = 0;
 
-var testObject = {
-    name: "",
-    type: "",
-    quest: [
-        {
-            text: "",
-            answer: [
-                {
-                    text: "",
-                    isRight: true
-                }
-            ]
-        }
-
-    ]
-};
-
 
 function addQuestionField() {
     console.log("addQuestion");
@@ -37,7 +20,7 @@ function addQuestionField() {
     deleteSpan.appendChild(deleteText);
     questionDeleteButton.appendChild(deleteSpan);
     var questionLabel = document.createElement("label");
-    var labelText = document.createTextNode("Question text:");
+    document.createTextNode("Question text:");
     var questionInput = document.createElement("input");
     questionDeleteButton.onclick = function () {
         var currentQuestion = document.getElementById("question".concat(containerId));
@@ -196,14 +179,6 @@ function generateNextAnswerId() {
     return answerId++;
 }
 
-function getNextAnswerId() {
-    return "answer-container".concat(generateNextAnswerId())
-}
-
-function getCurrentAnswerId() {
-    return answerId;
-}
-
 
 function deleteQuestion(id) {
     var currentQuestion = document.getElementById("question".concat(id));
@@ -245,11 +220,6 @@ function biuldTest() {
 
     console.log(test);
 
-    if ($("#edit").val() != 1) {
-        $.redirect("/addTest", {test: JSON.stringify(test)});
-    }
-    else {
-        $.redirect("/editor", {test: JSON.stringify(test)});
-    }
+    $.redirect("/editor", {test: JSON.stringify(test)}, "POST");
 }
 

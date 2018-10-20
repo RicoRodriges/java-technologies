@@ -15,9 +15,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 @Controller
-@RequestMapping("/registrationServlet")
+@RequestMapping("/registration")
 @RequiredArgsConstructor
-public class RegistrationServlet {
+public class Registration {
 
     private static final String USER = "user";
     private static final String PASSWORD = "password";
@@ -25,6 +25,7 @@ public class RegistrationServlet {
     private static final String REGISTRATION_JSP = "registration";
     private static final String LOGIN_JSP = "login";
     private static final String FLAG = "flag";
+    private static final String LOCALE = "locale";
 
     private final UserService userService;
 
@@ -34,13 +35,11 @@ public class RegistrationServlet {
                             @RequestParam(REPASSWORD) String userRePassCred,
                             HttpSession session,
                             Model model) {
-        String language = (String) session.getAttribute("locale");
+        String language = (String) session.getAttribute(LOCALE);
         if (language == null) {
             language = "en";
         }
-        model.addAttribute("locale", language);
-        Locale locale = new Locale(language);
-        ResourceBundle r = ResourceBundle.getBundle("internationalization", locale);
+        ResourceBundle r = ResourceBundle.getBundle("internationalization", new Locale(language));
 
         if (isEmptyFields(userNameCred, userPassCred, userRePassCred)) {
             model.addAttribute(FLAG, r.getString("registrationservlet.fill"));

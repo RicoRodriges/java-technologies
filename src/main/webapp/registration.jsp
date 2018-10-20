@@ -13,7 +13,7 @@
 <%@ include file="parts/lang.jsp" %>
 
 <div class="container login-form">
-    <form action="registrationServlet" method="post" name="registrationForm">
+    <form action="/registration" method="post" name="registrationForm">
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
@@ -54,7 +54,7 @@
              <p class="text-danger"> <c:out value="${requestScope.flag}"/> </p>
             </c:if>
                 <button type="submit" class="btn btn-primary"><fmt:message key="registration.register"/></button>
-                <a href="/login.jsp"><fmt:message key="registration.login"/> </a>
+                <a href="/login"><fmt:message key="registration.login"/> </a>
             </div>
         </div>
     </form>

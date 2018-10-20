@@ -11,7 +11,7 @@ import java.io.IOException;
 public class AuthFilter implements Filter {
 
     private static final String FORBIDDEN_JSP = "forbidden.jsp";
-    private static final String LOGIN_JSP = "login.jsp";
+    private static final String LOGIN = "login";
     private static final String USER = "user";
 
     @Override
@@ -43,7 +43,7 @@ public class AuthFilter implements Filter {
                 }
             } else {
                 if (isNotLoginPages(uri)) {
-                    ((HttpServletResponse) response).sendRedirect(LOGIN_JSP);
+                    ((HttpServletResponse) response).sendRedirect(LOGIN);
                 } else {
                     chain.doFilter(request, response);
                 }
@@ -54,30 +54,19 @@ public class AuthFilter implements Filter {
     private boolean isResourcesPages(String uri) {
         return uri.startsWith("/css")
                 || uri.startsWith("/js")
-                || uri.startsWith("/language")
                 || uri.startsWith("/images");
     }
 
 
     private boolean isNotLoginPages(String uri) {
-        return !(uri.endsWith("login.jsp")
-                || uri.endsWith("loginServlet")
-                || uri.endsWith("registration.jsp")
-                || uri.endsWith("registrationServlet"));
+        return !(uri.endsWith("/login") || uri.endsWith("/registration"));
     }
 
 
     private boolean isTutorPages(String uri) {
-        return uri.endsWith("addTestForm.jsp")
-                || uri.endsWith("addQuestionForm.jsp")
-                || uri.endsWith("addAnswerForm.jsp")
-                || uri.endsWith("addAnswerForm")
-                || uri.endsWith("addQuestionForm")
-                || uri.endsWith("addTestForm")
-                || uri.endsWith("editor")
-                || uri.endsWith("editor.jsp")
-                || uri.endsWith("userList.jsp")
-                || uri.endsWith("userListServlet");
+        return uri.endsWith("/editor")
+                || uri.endsWith("/delete")
+                || uri.endsWith("/userList");
 
     }
 

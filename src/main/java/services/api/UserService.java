@@ -12,8 +12,6 @@ public interface UserService {
 
     void registerUser(User user);
 
-    User get(long id);
-
     User get(String name);
 
     List<User> getAll();

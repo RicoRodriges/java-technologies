@@ -8,13 +8,13 @@
 </head>
 <body>
 
-    <c:set value="${test.getName()}" var="headerTitle" />
+    <c:set value="${requestScope.test.getName()}" var="headerTitle" />
     <c:set value="The test consists of questions with with choice of answer. There can be one or more right answers. Pay attention to wordings. After the test don't close browser or redirect into another web-site." var="headerDesc" />
     <%@ include file="parts/header.jsp" %>
 
-    <form action="result" method="POST" name="testpageForm">
+    <form action="/result" method="POST" name="testpageForm">
         <c:set var="qNumber" value="0"/>
-        <c:forEach items="${test.getQuest()}" var="q">
+        <c:forEach items="${requestScope.test.getQuest()}" var="q">
             <c:set var="qNumber" value="${qNumber+1}"/>
             <c:set var="correctAnswers" value="0"/>
             <c:forEach items="${q.getAnswers()}" var="a">
@@ -54,7 +54,7 @@
 
         <div class="row justify-content-md-center">
             <div class="col-md-4">
-                <input type="hidden" name="testId" value="${test.getId()}">
+                <input type="hidden" name="testId" value="${requestScope.test.getId()}">
                 <button class="btn btn-primary" type="submit"><fmt:message key="test.send"/></button>
                 <a href="/catalog"><fmt:message key="test.close"/></a>
             </div>

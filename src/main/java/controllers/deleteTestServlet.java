@@ -2,7 +2,7 @@ package controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import services.api.TestService;
@@ -16,9 +16,9 @@ public class deleteTestServlet {
 
     private final TestService testService;
 
-    @PostMapping
-    protected String doPost(@RequestParam(ID) String credentialsTestId) {
-        testService.removeTest(Long.parseLong(credentialsTestId));
+    @GetMapping
+    protected String doPost(@RequestParam(ID) Long testId) {
+        testService.removeTest(testId);
         return "redirect:/catalog";
     }
 }

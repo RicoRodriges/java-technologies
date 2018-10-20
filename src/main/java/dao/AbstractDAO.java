@@ -1,19 +1,48 @@
 package dao;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.util.ResourceBundle;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.List;
+import java.util.function.BiFunction;
 
 @RequiredArgsConstructor
 public abstract class AbstractDAO<E, K> {
-    protected final ResourceBundle sqlQueries = ResourceBundle.getBundle("sql_queries_dao");
-    protected final JdbcTemplate jdbcTemplate;
+    private final EntityManager entityManager;
 
-    public abstract E add(E entity);
+    protected abstract Class<E> getEntityClass();
 
-    public abstract E get(K id);
+    public E save(E entity) {
+        entityManager.getTransaction().begin();
+        E object = entityManager.merge(entity);
+        entityManager.getTransaction().commit();
+        return object;
+    }
 
-    public abstract void remove(K id);
+    public E findById(K id) {
+        return entityManager.find(getEntityClass(), id);
+    }
 
+    public List<E> findAll() {
+        return find(getEntityClass(), (criteriaBuilder, root) -> criteriaBuilder.conjunction());
+    }
+
+    public void deleteById(K id) {
+        entityManager.getTransaction().begin();
+        E object = findById(id);
+        entityManager.remove(object);
+        entityManager.getTransaction().commit();
+    }
+
+    protected List<E> find(Class<E> clazz, BiFunction<CriteriaBuilder, Root, Predicate> func) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<E> query = builder.createQuery(clazz);
+        Root<E> root = query.from(clazz);
+        query.select(root).where(func.apply(builder, root));
+        return entityManager.createQuery(query).getResultList();
+    }
 }
