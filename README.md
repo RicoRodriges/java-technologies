@@ -12,4 +12,4 @@ Tools:
 * JBCrypt
 * Lombok
 * Spring MVC
-* Hibernate
+* Hibernate + Spring ORM

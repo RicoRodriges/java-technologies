@@ -1,12 +1,12 @@
 package entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import dto.QuestionDto;
+import dto.TestDto;
+import dto.TestTypes;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,18 +14,14 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-public class Test implements Serializable {
-    @JsonIgnore
+public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JsonProperty("name")
     private String name;
-    @JsonProperty("quest")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "testId", nullable = false)
     private List<Question> quest = new ArrayList<>();
-    @JsonProperty("type")
     private TestTypes type;
     private LocalDate creationDate;
 
@@ -33,5 +29,15 @@ public class Test implements Serializable {
         this.name = name;
         this.quest = quest;
         this.type = type;
+    }
+
+    public Test(TestDto testDto) {
+        id = testDto.getId();
+        name = testDto.getName();
+        type = testDto.getType();
+        creationDate = testDto.getCreationDate();
+        for (QuestionDto questionDto : testDto.getQuest()) {
+            quest.add(new Question(questionDto));
+        }
     }
 }

@@ -1,7 +1,7 @@
 package controllers;
 
-import entity.Test;
-import entity.TestTypes;
+import dto.TestDto;
+import dto.TestTypes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +22,7 @@ public class CatalogServlet {
 
     @GetMapping
     protected String doGet(@RequestParam(name = "theme", required = false) String theme, Model model) {
-        List<Test> tests = Collections.emptyList();
+        List<TestDto> tests = Collections.emptyList();
         if (theme == null || "All".equals(theme)) {
             tests = testService.getAllTests();
             model.addAttribute("theme", "All");

@@ -1,10 +1,7 @@
 package services.impl;
 
 import dao.TestResultDAO;
-import entity.Answer;
-import entity.Question;
-import entity.TestResult;
-import entity.User;
+import dto.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -17,7 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestResultServiceImplTest {
@@ -29,25 +27,12 @@ public class TestResultServiceImplTest {
     private TestResultServiceImpl testResultService;
 
     @Test
-    public void getAllTestResultsByUserIdTest() {
-        TestResult testResult = mock(TestResult.class);
-        when(testResultDAO.findAllByUserId(anyLong())).thenReturn(Collections.singletonList(testResult));
-
-        List<TestResult> allTestResultsByUserId = testResultService.getAllTestResultsByUserId(100L);
-
-        verify(testResultDAO).findAllByUserId(eq(100L));
-
-        assertEquals(1, allTestResultsByUserId.size());
-        assertEquals(testResult, allTestResultsByUserId.get(0));
-    }
-
-    @Test
     public void CheckTestTest() {
-        entity.Test test = mock(entity.Test.class);
-        Question question = mock(Question.class);
-        Answer answerCorrect = mock(Answer.class);
-        Answer answerIncorrect = mock(Answer.class);
-        User user = mock(User.class);
+        TestDto test = mock(TestDto.class);
+        QuestionDto question = mock(QuestionDto.class);
+        AnswerDto answerCorrect = mock(AnswerDto.class);
+        AnswerDto answerIncorrect = mock(AnswerDto.class);
+        UserDto user = mock(UserDto.class);
 
         when(test.getQuest()).thenReturn(Collections.singletonList(question));
         when(test.getId()).thenReturn(1L);
@@ -61,7 +46,7 @@ public class TestResultServiceImplTest {
 
         HashMap<Long, List<Long>> answers = new HashMap<>();
         answers.put(1L, Collections.singletonList(1L));
-        TestResult testResult = testResultService.CheckTest(test, answers, user);
+        TestResultDto testResult = testResultService.CheckTest(test, answers, user);
         assertEquals(Integer.valueOf(1), testResult.getCountAnswers());
         assertEquals(Integer.valueOf(1), testResult.getCorrectAnswers());
 

@@ -2,17 +2,24 @@ package dao;
 
 import entity.User;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
+@Transactional
 public class UserDAO extends AbstractDAO<User, Long> {
 
     private final static String NAME = "name";
 
-    public UserDAO(EntityManager entityManager) {
-        super(entityManager);
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return entityManager;
     }
 
     public User findByName(String name) {

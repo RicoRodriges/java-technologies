@@ -1,7 +1,7 @@
 package controllers;
 
-import entity.TestResult;
-import entity.User;
+import dto.TestResultDto;
+import dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +30,7 @@ public class ProfileServlet {
     protected String doGet(@RequestParam(name = USER, required = false) String username,
                            HttpSession session,
                            Model model) {
-        User user = (User) session.getAttribute(USER);
+        UserDto user = (UserDto) session.getAttribute(USER);
         if (username == null) {
             return displayUserTests(user, model);
         } else {
@@ -42,8 +42,8 @@ public class ProfileServlet {
         }
     }
 
-    private String displayUserTests(User user, Model model) {
-        List<TestResult> testResults = testResultService.getAllTestResultsByUserId(user.getId());
+    private String displayUserTests(UserDto user, Model model) {
+        List<TestResultDto> testResults = testResultService.getAllTestResultsByUserId(user.getId());
         Collections.reverse(testResults);
         model.addAttribute("testResults", testResults);
         return PROFILE_JSP;

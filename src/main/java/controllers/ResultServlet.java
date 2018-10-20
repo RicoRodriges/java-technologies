@@ -1,9 +1,9 @@
 package controllers;
 
-import entity.Question;
-import entity.Test;
-import entity.TestResult;
-import entity.User;
+import dto.QuestionDto;
+import dto.TestDto;
+import dto.TestResultDto;
+import dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -40,9 +40,9 @@ public class ResultServlet {
 
     @PostMapping
     protected String doPost(HttpServletRequest req, Model model) {
-        Test test = testService.getTest(Long.parseLong(req.getParameter(TEST_ID)));
+        TestDto test = testService.getTest(Long.parseLong(req.getParameter(TEST_ID)));
         Map<Long, List<Long>> answers = new HashMap<>();
-        for (Question q : test.getQuest()) {
+        for (QuestionDto q : test.getQuest()) {
             if (req.getParameterValues("q" + q.getId()) != null) {
                 List<Long> answerList = Arrays.stream(req.getParameterValues("q" + q.getId()))
                         .mapToLong(Long::parseLong)
@@ -51,11 +51,11 @@ public class ResultServlet {
                 answers.put(q.getId(), answerList);
             }
         }
-        TestResult result = testResultService.CheckTest(test, answers, (User) req.getSession().getAttribute("user"));
+        TestResultDto result = testResultService.CheckTest(test, answers, (UserDto) req.getSession().getAttribute("user"));
         testResultService.add(result);
         int score = testResultService.getScore(result);
 
-        log.info("Test " + test + " was solved. " +
+        log.info("TestDto " + test + " was solved. " +
                 "Score: " + score + ". " +
                 "Correct answers: " + result.getCorrectAnswers() + "/" + result.getCountAnswers() + ".");
 

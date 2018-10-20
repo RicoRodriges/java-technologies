@@ -1,20 +1,20 @@
 package services.api;
 
-import entity.Test;
-import entity.TestResult;
-import entity.User;
+import dto.TestDto;
+import dto.TestResultDto;
+import dto.UserDto;
 
 import java.util.List;
 import java.util.Map;
 
 public interface TestResultService {
 
-    void add(TestResult testResult);
+    void add(TestResultDto testResult);
 
-    List<TestResult> getAllTestResultsByUserId(Long userId);
+    List<TestResultDto> getAllTestResultsByUserId(Long userId);
 
-    TestResult CheckTest(Test test, Map<Long, List<Long>> answers, User user);
+    TestResultDto CheckTest(TestDto test, Map<Long, List<Long>> answers, UserDto user);
 
-    int getScore(TestResult result);
+    int getScore(TestResultDto result);
 
 }

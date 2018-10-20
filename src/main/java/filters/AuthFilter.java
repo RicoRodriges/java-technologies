@@ -1,6 +1,6 @@
 package filters;
 
-import entity.User;
+import dto.UserDto;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -30,8 +30,8 @@ public class AuthFilter implements Filter {
         if (isResourcesPages(uri)) {
             chain.doFilter(request, response);
         } else {
-            User user;
-            if (session != null && (user = (User) session.getAttribute(USER)) != null) {
+            UserDto user;
+            if (session != null && (user = (UserDto) session.getAttribute(USER)) != null) {
                 if (isTutorPages(uri)) {
                     if (user.getIsTutor()) {
                         chain.doFilter(request, response);

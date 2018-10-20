@@ -1,6 +1,6 @@
 package controllers;
 
-import entity.Test;
+import dto.TestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +22,7 @@ public class TestServlet {
 
     @GetMapping
     protected String doGet(@RequestParam(ID) Long testId, Model model) {
-        Test particularTest = testService.getTest(testId);
+        TestDto particularTest = testService.getTest(testId);
         model.addAttribute(TEST, particularTest);
         return TEST_JSP;
     }

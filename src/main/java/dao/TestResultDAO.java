@@ -2,17 +2,24 @@ package dao;
 
 import entity.TestResult;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
+@Transactional
 public class TestResultDAO extends AbstractDAO<TestResult, Long> {
 
-    private final static String USERID = "userId";
+    private final static String USERID = "user";
 
-    public TestResultDAO(EntityManager entityManager) {
-        super(entityManager);
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return entityManager;
     }
 
     public List<TestResult> findAllByUserId(Long userId) {

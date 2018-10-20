@@ -1,6 +1,6 @@
 package controllers;
 
-import entity.User;
+import dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +21,7 @@ public class UserListServlet {
 
     @GetMapping
     protected String doGet(Model model) {
-        List<User> users = userService.getAll();
+        List<UserDto> users = userService.getAll();
         model.addAttribute("users", users);
         return USER_LIST_JSP;
     }

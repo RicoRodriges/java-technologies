@@ -1,20 +1,20 @@
 package services.api;
 
-import entity.Test;
-import entity.TestTypes;
+import dto.TestDto;
+import dto.TestTypes;
 import services.impl.EditorStatus;
 
 import java.util.List;
 
 public interface TestService {
 
-    Test getTest(Long id);
+    TestDto getTest(Long id);
 
-    List<Test> getAllTests();
+    List<TestDto> getAllTests();
 
-    List<Test> getAllTestsByTheme(TestTypes type);
+    List<TestDto> getAllTestsByTheme(TestTypes type);
 
     void removeTest(Long id);
 
-    EditorStatus editThroughForm(Test test);
+    EditorStatus editThroughForm(TestDto test);
 }

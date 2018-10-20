@@ -1,6 +1,6 @@
 package controllers;
 
-import entity.User;
+import dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +33,7 @@ public class LoginServlet {
                             @RequestParam(PASSWORD) String pass,
                             HttpSession session,
                             Model model) {
-        User user = userService.authorizeUser(name, pass);
+        UserDto user = userService.authorizeUser(name, pass);
 
         String language = (String) session.getAttribute(LOCALE);
         if (language == null) {

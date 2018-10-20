@@ -26,9 +26,9 @@
         <tbody>
             <c:forEach items="${requestScope.testResults}" var="tR">
                 <tr>
-                    <td>${f:getTestName(tR.getTestId())}</td>
+                    <td>${tR.getTest().getName()}</td>
                     <td>${tR.getCorrectAnswers()}/${tR.getCountAnswers()}</td>
-                    <td>${f:getPercents(tR)}</td>
+                    <td>${100 * tR.getCorrectAnswers() / tR.getCountAnswers()}</td>
                     <td>${f:dateFormat(tR.getDate())}</td>
                 </tr>
             </c:forEach>

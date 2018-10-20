@@ -1,6 +1,6 @@
 package controllers;
 
-import entity.User;
+import dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +45,7 @@ public class Registration {
             model.addAttribute(FLAG, r.getString("registrationservlet.fill"));
             return REGISTRATION_JSP;
         } else {
-            User user = new User(userNameCred, userPassCred, false);
+            UserDto user = new UserDto(null, userNameCred, userPassCred, false);
             if (userService.isAlreadyExists(user)) {
                 model.addAttribute(FLAG, r.getString("registrationservlet.exists"));
                 return REGISTRATION_JSP;

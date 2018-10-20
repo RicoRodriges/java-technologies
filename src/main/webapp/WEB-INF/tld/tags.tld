@@ -6,18 +6,6 @@
     <uri>/WEB-INF/tld/tags</uri>
 
     <function>
-        <name>getTestName</name>
-        <function-class>config.Utils</function-class>
-        <function-signature>java.lang.String getTestName(long)</function-signature>
-    </function>
-
-    <function>
-        <name>getPercents</name>
-        <function-class>config.Utils</function-class>
-        <function-signature>int getPercents(entity.TestResult)</function-signature>
-    </function>
-
-    <function>
         <name>dateFormat</name>
         <function-class>config.Utils</function-class>
         <function-signature>java.lang.String dateFormat(java.time.LocalDateTime)</function-signature>

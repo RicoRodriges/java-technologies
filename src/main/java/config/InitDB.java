@@ -1,32 +1,27 @@
 package config;
 
+import dao.UserDAO;
 import entity.User;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-
-import javax.annotation.PostConstruct;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 
 @RequiredArgsConstructor
 public class InitDB {
 
     private final static Logger log = LogManager.getLogger(InitDB.class);
 
-    private final SessionFactory sessionFactory;
+    private final UserDAO userDAO;
     private final String tutorName;
     private final String tutorPassword;
 
-    @PostConstruct
-    public void init() {
+    @EventListener
+    public void init(ContextRefreshedEvent event) {
         User user = new User(tutorName, tutorPassword, true);
         user.setId(1L);
-        Session session = sessionFactory.openSession();
-        session.getTransaction().begin();
-        session.merge(user);
-        session.getTransaction().commit();
-        session.close();
+        userDAO.save(user);
         log.info("Database successfully initialized");
     }
 }

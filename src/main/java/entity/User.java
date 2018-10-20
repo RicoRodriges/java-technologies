@@ -1,5 +1,6 @@
 package entity;
 
+import dto.UserDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,12 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @Entity
-public class User implements Serializable {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,5 +24,12 @@ public class User implements Serializable {
         this.name = name;
         this.password = password;
         this.isTutor = isTutor;
+    }
+
+    public User(UserDto userDto) {
+        id = userDto.getId();
+        name = userDto.getName();
+        password = userDto.getPassword();
+        isTutor = userDto.getIsTutor();
     }
 }

@@ -1,19 +1,19 @@
 package services.api;
 
-import entity.User;
+import dto.UserDto;
 
 import java.util.List;
 
 public interface UserService {
 
-    boolean isAlreadyExists(User user);
+    boolean isAlreadyExists(UserDto user);
 
-    User authorizeUser(String name, String pass);
+    UserDto authorizeUser(String name, String pass);
 
-    void registerUser(User user);
+    void registerUser(UserDto user);
 
-    User get(String name);
+    UserDto get(String name);
 
-    List<User> getAll();
+    List<UserDto> getAll();
 
 }

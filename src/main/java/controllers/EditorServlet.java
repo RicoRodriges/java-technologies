@@ -1,7 +1,7 @@
 package controllers;
 
-import entity.Test;
-import entity.TestTypes;
+import dto.TestDto;
+import dto.TestTypes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +28,7 @@ public class EditorServlet {
     private final TestService testService;
 
     @PostMapping
-    protected String doPost(@RequestParam(TEST) Test editableTest,
+    protected String doPost(@RequestParam(TEST) TestDto editableTest,
                             HttpSession session,
                             Model model) {
         Long testId = (Long) session.getAttribute(TEST_ID);
@@ -56,7 +56,7 @@ public class EditorServlet {
             model.addAttribute(TEST, testService.getTest(testID));
             session.setAttribute(TEST_ID, testID);
         } else {
-            Test test = new Test();
+            TestDto test = new TestDto();
             test.setType(TestTypes.MATH);
             model.addAttribute(TEST, test);
             session.removeAttribute(TEST_ID);
@@ -64,7 +64,7 @@ public class EditorServlet {
         return EDITOR_JSP;
     }
 
-    private EditorStatus changeTest(Test test) {
+    private EditorStatus changeTest(TestDto test) {
         return testService.editThroughForm(test);
     }
 }

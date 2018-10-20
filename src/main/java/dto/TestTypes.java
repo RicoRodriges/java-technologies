@@ -1,13 +1,15 @@
-package entity;
+package dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
 @AllArgsConstructor
-public enum TestTypes {
+public enum TestTypes implements Serializable {
     @JsonProperty("Math")
     MATH("Math"),
     @JsonProperty("Physics")
