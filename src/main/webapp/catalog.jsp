@@ -48,7 +48,8 @@
 
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <c:if test="${sessionScope.user.getIsTutor()}">
+                            <sec:authentication var="user" property="principal" />
+                            <c:if test="${user.getUser().getIsTutor()}">
                                 <div class="d-flex justify-content-end align-items-baseline test-del">
                                     <a href="<c:url value="/delete?id=${test.getId()}"/>" class="btn btn-danger btn-xs">X</a>
                                 </div>
@@ -74,7 +75,7 @@
                                     <a href="<c:url value="/test?id=${test.getId()}"/>" class="btn btn-primary">
                                     <fmt:message key="catalog.start"/>
                                     </a>
-                                    <c:if test="${sessionScope.user.getIsTutor()}">
+                                    <c:if test="${user.getUser().getIsTutor()}">
                                       <a href="<c:url value="/editor?id=${test.getId()}"/>" class="btn btn-primary btn-xs">
                                       <fmt:message key="catalog.edit"/>
                                       </a>

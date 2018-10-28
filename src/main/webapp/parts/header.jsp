@@ -11,8 +11,9 @@
                         <p class="text-muted">${headerDesc}</p>
                     </div>
 
+                    <sec:authentication var="user" property="principal" />
                     <c:choose>
-                    <c:when test="${sessionScope.user.getIsTutor()}">
+                    <c:when test="${user.getUser().getIsTutor()}">
 
                         <div class="btn-group">
                             <div><a href="/editor" class="btn btn-primary">

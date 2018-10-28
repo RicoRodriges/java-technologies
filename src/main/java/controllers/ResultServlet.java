@@ -1,12 +1,13 @@
 package controllers;
 
+import config.security.SpringUser;
 import dto.QuestionDto;
 import dto.TestDto;
 import dto.TestResultDto;
-import dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,7 +52,8 @@ public class ResultServlet {
                 answers.put(q.getId(), answerList);
             }
         }
-        TestResultDto result = testResultService.CheckTest(test, answers, (UserDto) req.getSession().getAttribute("user"));
+        SpringUser springUser = (SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TestResultDto result = testResultService.CheckTest(test, answers, springUser.getUser());
         testResultService.add(result);
         int score = testResultService.getScore(result);
 

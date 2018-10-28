@@ -1,8 +1,10 @@
 package controllers;
 
+import config.security.SpringUser;
 import dto.TestResultDto;
 import dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import services.api.TestResultService;
 import services.api.UserService;
 
-import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,9 +29,9 @@ public class ProfileServlet {
 
     @GetMapping
     protected String doGet(@RequestParam(name = USER, required = false) String username,
-                           HttpSession session,
                            Model model) {
-        UserDto user = (UserDto) session.getAttribute(USER);
+        SpringUser springUser = (SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto user = springUser.getUser();
         if (username == null) {
             return displayUserTests(user, model);
         } else {

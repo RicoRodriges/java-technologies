@@ -13,3 +13,4 @@ Tools:
 * Lombok
 * Spring MVC
 * Hibernate + Spring Data (`JpaRepository`)
+* Spring Security

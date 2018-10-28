@@ -49,8 +49,8 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-            <c:if test="${not empty requestScope.flag}">
-            <p class="text-danger"> <c:out value="${requestScope.flag}"/> </p>
+            <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
+            <p class="text-danger"> <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/> </p>
             </c:if>
                 <button type="submit" class="btn btn-primary" id="loginBtn"><fmt:message key="login.login"/></button>
                 <a href="/registration"><fmt:message key="login.singup"/> </a>
