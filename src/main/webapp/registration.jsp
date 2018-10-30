@@ -47,6 +47,48 @@
             </div>
             <div class="col-md-3"></div>
         </div>
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="university">University: </label>
+                    <select id="university" name="university"></select>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="faculties">Faculty: </label>
+                    <select id="faculties" name="faculties"></select>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="departments">Department: </label>
+                    <select id="departments" name="departments"></select>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="groups">Group: </label>
+                    <select id="groups" name="groups"></select>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
@@ -60,6 +102,41 @@
     </form>
 </div>
 
+<script>
+    var universities;
+    $.ajax({
+        type: 'GET',
+        url: '/universities',
+        success: function (data) {
+            // the next thing you want to do
+            var university_select = $('#university');
+            university_select.empty();
+            $('#faculties').empty();
+            $('#departments').empty();
+            $('#groups').empty();
+            university_select.append('<option value=0></option>');
+            for (var i = 0; i < data.length; i++) {
+                university_select.append('<option value=' + data[i].id + '>' + data[i].name + '</option>');
+            }
+            universities = data;
+        }
+    });
 
+    $('#university').change(function () {
+        var id = $(this).find(':selected')[0].value;
+        var fac_select = $('#faculties');
+        fac_select.empty();
+        $('#departments').empty();
+        $('#groups').empty();
+        for (var i = 0; i < universities.length; i++) {
+            if (id == universities[i].id) {
+                fac_select.append('<option value=0></option>');
+                for (var j = 0; j < universities[i].faculties.length; j++) {
+                    fac_select.append('<option value=' + universities[i].faculties[j].id + '>' + universities[i].faculties[j].name + '</option>');
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>

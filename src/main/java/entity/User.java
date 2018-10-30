@@ -4,10 +4,7 @@ import dto.UserDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +16,9 @@ public class User {
     private String name;
     private String password;
     private Boolean isTutor;
+    @ManyToOne
+    @JoinColumn
+    private Group group;
 
     public User(String name, String password, Boolean isTutor) {
         this.name = name;
