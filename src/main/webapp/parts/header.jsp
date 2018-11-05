@@ -20,6 +20,9 @@
                                 <div><a href="/registerTutor" class="btn btn-primary">
                                     Register tutor
                                 </a></div>
+                                <div><a href="/registerUniver" class="btn btn-primary">
+                                    Register universities
+                                </a></div>
                             </c:if>
                             <c:if test="${user.getUser().getGroupEntity() != null}">
                                 <div><a href="/editor" class="btn btn-primary">
@@ -29,6 +32,9 @@
                                     Statistics
                                 </a></div>
                             </c:if>
+                            <div><a href="/registerGroups" class="btn btn-primary">
+                                Register groups
+                            </a></div>
                             <div><a href="/userList" class="btn btn-primary">
                                 <fmt:message key="catalog.userspage"/>
                             </a></div>

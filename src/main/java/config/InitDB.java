@@ -9,6 +9,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 
 @RequiredArgsConstructor
 public class InitDB {
@@ -36,27 +38,19 @@ public class InitDB {
 
             Department is = new Department();
             is.setName("ИС");
-            is.setGroups(Arrays.asList(g3373, g3374));
-
-            Department apu = new Department();
-            apu.setName("АПУ");
+            is.setGroups(new HashSet<>(Arrays.asList(g3373, g3374)));
 
             Faculty fkti = new Faculty();
             fkti.setName("ФКТИ");
-            fkti.setDepartments(Arrays.asList(is, apu));
-
-            Faculty fel = new Faculty();
-            fel.setName("ФЭЛ");
+            fkti.setDepartments(new HashSet<>(Collections.singletonList(is)));
 
             University leti = new University();
             leti.setName("ЛЭТИ");
-            leti.setFaculties(Arrays.asList(fkti, fel));
+            leti.setFaculties(new HashSet<>(Collections.singletonList(fkti)));
 
-            fel.setUniversity(leti);
             fkti.setUniversity(leti);
 
             is.setFaculty(fkti);
-            apu.setFaculty(fkti);
 
             g3373.setDepartment(is);
             g3374.setDepartment(is);

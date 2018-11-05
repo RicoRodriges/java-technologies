@@ -70,6 +70,7 @@ public class DBConfig {
         Properties properties = new Properties();
         properties.setProperty(org.hibernate.cfg.Environment.HBM2DDL_AUTO, "create");
         properties.setProperty(org.hibernate.cfg.Environment.DIALECT, env.getProperty("hibernate.dialect"));
+        properties.setProperty("hibernate.event.merge.entity_copy_observer", "allow");
         return properties;
     }
 
