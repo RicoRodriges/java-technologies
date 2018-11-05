@@ -1,8 +1,11 @@
 package controllers;
 
+import config.security.SpringUser;
 import dto.TestDto;
 import dto.TestTypes;
+import dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,13 +27,14 @@ public class CatalogServlet {
     @GetMapping
     protected String doGet(@RequestParam(name = "theme", required = false) String theme, Model model) {
         List<TestDto> tests = Collections.emptyList();
+        UserDto user = ((SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         if (theme == null || "All".equals(theme)) {
-            tests = testService.getAllTests();
+            tests = testService.getAllTests(user);
             model.addAttribute("theme", "All");
         } else {
             for (TestTypes type : TestTypes.values()) {
                 if (type.getName().equals(theme)) {
-                    tests = testService.getAllTestsByTheme(type);
+                    tests = testService.getAllTestsByTheme(type, user);
                     break;
                 }
             }

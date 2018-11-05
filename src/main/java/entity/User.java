@@ -18,12 +18,13 @@ public class User {
     private Boolean isTutor;
     @ManyToOne
     @JoinColumn
-    private Group group;
+    private GroupEntity group;
 
-    public User(String name, String password, Boolean isTutor) {
+    public User(String name, String password, Boolean isTutor, GroupEntity group) {
         this.name = name;
         this.password = password;
         this.isTutor = isTutor;
+        this.group = group;
     }
 
     public User(UserDto userDto) {
@@ -31,5 +32,6 @@ public class User {
         name = userDto.getName();
         password = userDto.getPassword();
         isTutor = userDto.getIsTutor();
+        group = userDto.getGroupEntity();
     }
 }

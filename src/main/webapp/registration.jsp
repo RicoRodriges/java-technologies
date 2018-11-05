@@ -48,46 +48,9 @@
             <div class="col-md-3"></div>
         </div>
 
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="university">University: </label>
-                    <select id="university" name="university"></select>
-                </div>
-            </div>
-            <div class="col-md-3"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="faculties">Faculty: </label>
-                    <select id="faculties" name="faculties"></select>
-                </div>
-            </div>
-            <div class="col-md-3"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="departments">Department: </label>
-                    <select id="departments" name="departments"></select>
-                </div>
-            </div>
-            <div class="col-md-3"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="groups">Group: </label>
-                    <select id="groups" name="groups"></select>
-                </div>
-            </div>
-            <div class="col-md-3"></div>
-        </div>
+        <span id="vue-section">
+            <choose-university v-bind:universities="universities"></choose-university>
+        </span>
 
         <div class="row">
             <div class="col-md-3"></div>
@@ -103,38 +66,85 @@
 </div>
 
 <script>
-    var universities;
+    Vue.component('choose-group', {
+        props: ['groups'],
+        template: '<div class="form-group">\n' +
+            '           <label for="groups">Group: </label>\n' +
+            '           <select id="groups" name="groups"><option value=""/>' +
+            '               <option v-for="group in groups"' +
+            '                       v-bind:value="group.id">{{ group.name }}</option>' +
+            '           </select>\n' +
+            '      </div>'
+    });
+
+    Vue.component('choose-department', {
+        props: ['departments'],
+        template: '<div><div class="form-group">\n' +
+            '           <label for="departments">Department: </label>\n' +
+            '           <select id="departments" name="departments" v-model="selectedDepartment"><option value="[]"/>' +
+            '               <option v-for="dep in departments"' +
+            '                       v-bind:value="JSON.stringify(dep.groups)">{{ dep.name }}</option>' +
+            '           </select>\n' +
+            '      </div>' +
+            '      <choose-group v-if="selectedDepartment != \'[]\'" v-bind:groups="JSON.parse(selectedDepartment)"></choose-group></div>',
+        data: function () {
+            return {
+                selectedDepartment: "[]"
+            };
+        }
+    });
+
+    Vue.component('choose-faculty', {
+        props: ['faculties'],
+        template: '<div><div class="form-group">\n' +
+            '           <label for="faculty">Faculty: </label>\n' +
+            '           <select id="faculty" name="faculty" v-model="selectedFaculty"><option value="[]"/>' +
+            '               <option v-for="fac in faculties"' +
+            '                       v-bind:value="JSON.stringify(fac.departments)">{{ fac.name }}</option>' +
+            '           </select>\n' +
+            '      </div>' +
+            '      <choose-department v-if="selectedFaculty != \'[]\'" v-bind:departments="JSON.parse(selectedFaculty)"></choose-department></div>',
+        data: function () {
+            return {
+                selectedFaculty: "[]"
+            };
+        }
+    });
+
+    Vue.component('choose-university', {
+        props: ['universities'],
+        template: '<div class="row">\n' +
+            '            <div class="col-md-3"></div>\n' +
+            '            <div class="col-md-6">\n' +
+            '                <div class="form-group">\n' +
+            '                    <label for="university">University: </label>\n' +
+            '                    <select id="university" name="university" v-model="selectedUni">' +
+            '                        <option value="[]"/>' +
+            '                        <option v-for="uni in universities"' +
+            '                                v-bind:value="JSON.stringify(uni.faculties)">{{ uni.name }}</option>' +
+            '                    </select>\n' +
+            '                </div>\n' +
+            '                <choose-faculty v-if="selectedUni != \'[]\'" v-bind:faculties="JSON.parse(selectedUni)"></choose-faculty>' +
+            '            </div>\n' +
+            '            <div class="col-md-3"></div>\n' +
+            '        </div>',
+        data: function () {
+            return {
+                selectedUni: "[]"
+            };
+        }
+    });
+
     $.ajax({
         type: 'GET',
         url: '/universities',
         success: function (data) {
-            // the next thing you want to do
-            var university_select = $('#university');
-            university_select.empty();
-            $('#faculties').empty();
-            $('#departments').empty();
-            $('#groups').empty();
-            university_select.append('<option value=0></option>');
-            for (var i = 0; i < data.length; i++) {
-                university_select.append('<option value=' + data[i].id + '>' + data[i].name + '</option>');
-            }
-            universities = data;
-        }
-    });
-
-    $('#university').change(function () {
-        var id = $(this).find(':selected')[0].value;
-        var fac_select = $('#faculties');
-        fac_select.empty();
-        $('#departments').empty();
-        $('#groups').empty();
-        for (var i = 0; i < universities.length; i++) {
-            if (id == universities[i].id) {
-                fac_select.append('<option value=0></option>');
-                for (var j = 0; j < universities[i].faculties.length; j++) {
-                    fac_select.append('<option value=' + universities[i].faculties[j].id + '>' + universities[i].faculties[j].name + '</option>');
+            new Vue({
+                el: '#vue-section',
+                data: {
+                    universities: data
                 }
-            }
+            });
         }
     });
 </script>

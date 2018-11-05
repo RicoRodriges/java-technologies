@@ -16,11 +16,21 @@
                     <c:when test="${user.getUser().getIsTutor()}">
 
                         <div class="btn-group">
-                            <div><a href="/editor" class="btn btn-primary">
-                            <fmt:message key="catalog.createtest"/>
-                            </a></div>
+                            <c:if test="${user.getUser().getGroupEntity() == null}">
+                                <div><a href="/registerTutor" class="btn btn-primary">
+                                    Register tutor
+                                </a></div>
+                            </c:if>
+                            <c:if test="${user.getUser().getGroupEntity() != null}">
+                                <div><a href="/editor" class="btn btn-primary">
+                                <fmt:message key="catalog.createtest"/>
+                                </a></div>
+                                <div><a href="/stat" class="btn btn-primary">
+                                    Statistics
+                                </a></div>
+                            </c:if>
                             <div><a href="/userList" class="btn btn-primary">
-                            <fmt:message key="catalog.userspage"/>
+                                <fmt:message key="catalog.userspage"/>
                             </a></div>
                             <div><a href="/logout" class="btn btn-primary">
                             <fmt:message key="catalog.logout"/>

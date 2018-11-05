@@ -35,6 +35,24 @@
                 <option value="English"><fmt:message key="catalog.english"/></option>
             </select>
 
+            <div id="vue-group">
+                <label>Choose groups</label>
+                <vue-multiselect v-model="value" placeholder="Search a group" label="name" track-by="id" :options="options" :multiple="true"></vue-multiselect>
+                <input id="groups" type="hidden" v-bind:value="JSON.stringify(value)" name="groups"/>
+            </div>
+
+            <script>
+                Vue.component('vue-multiselect', window.VueMultiselect.default);
+
+                var appVue = new Vue({
+                    el: '#vue-group',
+                    data: {
+                        value: ${requestScope.selGroups},
+                        options: ${requestScope.groups}
+                    }
+                });
+            </script>
+
             <button type="submit" class="btn btn-primary create-question-button" onclick="addQuestionField()">
             <fmt:message key="testeditor.addquestion"/>
             </button>

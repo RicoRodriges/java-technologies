@@ -2,8 +2,10 @@ package dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import entity.GroupEntity;
 import entity.Question;
 import entity.Test;
+import entity.University;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +25,7 @@ public class TestDto implements Serializable {
     private List<QuestionDto> quest = new ArrayList<>();
     @JsonProperty("type")
     private TestTypes type;
+    private List<GroupEntity> groups;
     private LocalDate creationDate;
 
     public TestDto(Test test) {
@@ -33,5 +36,6 @@ public class TestDto implements Serializable {
         for (Question q : test.getQuest()) {
             this.quest.add(new QuestionDto(q));
         }
+        this.groups = test.getGroups();
     }
 }

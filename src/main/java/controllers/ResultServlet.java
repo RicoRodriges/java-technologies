@@ -5,8 +5,6 @@ import dto.QuestionDto;
 import dto.TestDto;
 import dto.TestResultDto;
 import lombok.RequiredArgsConstructor;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +26,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ResultServlet {
 
-    private final static Logger log = LogManager.getLogger(ResultServlet.class);
     private static final String RESULT = "result";
     private static final String TEST = "test";
     private static final String SCORE = "score";
@@ -54,12 +51,10 @@ public class ResultServlet {
         }
         SpringUser springUser = (SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         TestResultDto result = testResultService.CheckTest(test, answers, springUser.getUser());
-        testResultService.add(result);
+        if (!springUser.getUser().getIsTutor()) {
+            testResultService.add(result);
+        }
         int score = testResultService.getScore(result);
-
-        log.info("TestDto " + test + " was solved. " +
-                "Score: " + score + ". " +
-                "Correct answers: " + result.getCorrectAnswers() + "/" + result.getCountAnswers() + ".");
 
         model.addAttribute(RESULT, result);
         model.addAttribute(TEST, test);

@@ -1,19 +1,18 @@
 package services.impl;
 
 import dao.TestDAO;
-import dto.AnswerDto;
-import dto.QuestionDto;
-import dto.TestDto;
-import dto.TestTypes;
+import dto.*;
+import entity.GroupEntity;
 import entity.Test;
+import entity.University;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import services.api.TestService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +29,19 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public List<TestDto> getAllTests() {
-        List<Test> tests = testDAO.findAll();
+    public List<TestDto> getAllTests(UserDto userDto) {
+        Set<Test> tests;
+        if (!userDto.getIsTutor()) {
+            GroupEntity group = userDto.getGroupEntity();
+            tests = testDAO.findAllByGroupsIn(Collections.singletonList(group));
+        } else if (userDto.getGroupEntity() == null) {
+            tests = new HashSet<>(testDAO.findAll());
+        } else {
+            List<GroupEntity> groups = userDto.getGroupEntity().getDepartment().getFaculty().getUniversity().getFaculties().stream()
+                    .flatMap(f -> f.getDepartments().stream()
+                            .flatMap(d -> d.getGroups().stream())).collect(Collectors.toList());
+            tests = testDAO.findAllByGroupsIn(groups);
+        }
         ArrayList<TestDto> testDtos = new ArrayList<>(tests.size());
         for (Test test : tests) {
             testDtos.add(new TestDto(test));
@@ -40,13 +50,10 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public List<TestDto> getAllTestsByTheme(TestTypes type) {
-        List<Test> tests = testDAO.findAllByType(type);
-        ArrayList<TestDto> testDtos = new ArrayList<>(tests.size());
-        for (Test test : tests) {
-            testDtos.add(new TestDto(test));
-        }
-        return testDtos;
+    public List<TestDto> getAllTestsByTheme(TestTypes type, UserDto userDto) {
+        List<TestDto> tests = getAllTests(userDto);
+        tests.removeIf(t -> !t.getType().equals(type));
+        return tests;
     }
 
     @Override

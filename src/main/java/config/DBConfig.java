@@ -1,5 +1,6 @@
 package config;
 
+import dao.UniversityDAO;
 import dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -73,8 +74,8 @@ public class DBConfig {
     }
 
     @Bean
-    public InitDB initDB(UserDAO userDAO) {
-        return new InitDB(userDAO,
+    public InitDB initDB(UserDAO userDAO, UniversityDAO universityDAO) {
+        return new InitDB(userDAO, universityDAO,
                 env.getProperty("user.tutor.name"),
                 env.getProperty("user.tutor.password"));
     }

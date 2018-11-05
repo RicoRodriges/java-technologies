@@ -220,6 +220,6 @@ function biuldTest() {
 
     console.log(test);
 
-    $.redirect("/editor", {test: JSON.stringify(test)}, "POST");
+    $.redirect("/editor", {test: JSON.stringify(test), groups: JSON.stringify(appVue.$data.value)}, "POST");
 }
 

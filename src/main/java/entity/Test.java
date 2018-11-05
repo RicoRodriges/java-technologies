@@ -23,12 +23,15 @@ public class Test {
     @JoinColumn(name = "testId", nullable = false)
     private List<Question> quest = new ArrayList<>();
     private TestTypes type;
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    private List<GroupEntity> groups = new ArrayList<>();
     private LocalDate creationDate;
 
-    public Test(String name, List<Question> quest, TestTypes type) {
+    public Test(String name, List<Question> quest, TestTypes type, List<GroupEntity> groups) {
         this.name = name;
         this.quest = quest;
         this.type = type;
+        this.groups = groups;
     }
 
     public Test(TestDto testDto) {
@@ -39,5 +42,6 @@ public class Test {
         for (QuestionDto questionDto : testDto.getQuest()) {
             quest.add(new Question(questionDto));
         }
+        groups = testDto.getGroups();
     }
 }
