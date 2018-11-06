@@ -1,18 +1,27 @@
 package services.impl;
 
 import dao.TestDAO;
-import dto.*;
+import dao.UniversityDAO;
+import dto.AnswerDto;
+import dto.QuestionDto;
+import dto.TestDto;
+import dto.TestTypes;
+import dto.UserDto;
 import entity.GroupEntity;
 import entity.Test;
-import entity.University;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import services.api.TestService;
 
 import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static config.Utils.getAvailableGroups;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +29,7 @@ import java.util.stream.Collectors;
 public class TestServiceImpl implements TestService {
 
     private final TestDAO testDAO;
+    private final UniversityDAO universityDAO;
 
     @Override
     public TestDto getTest(Long id) {
@@ -37,9 +47,7 @@ public class TestServiceImpl implements TestService {
         } else if (userDto.getGroupEntity() == null) {
             tests = new HashSet<>(testDAO.findAll());
         } else {
-            List<GroupEntity> groups = userDto.getGroupEntity().getDepartment().getFaculty().getUniversity().getFaculties().stream()
-                    .flatMap(f -> f.getDepartments().stream()
-                            .flatMap(d -> d.getGroups().stream())).collect(Collectors.toList());
+            List<GroupEntity> groups = getAvailableGroups(userDto, universityDAO);
             tests = testDAO.findAllByGroupsIn(groups);
         }
         ArrayList<TestDto> testDtos = new ArrayList<>(tests.size());

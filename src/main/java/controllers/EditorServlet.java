@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import config.security.SpringUser;
 import dao.GroupsDAO;
+import dao.UniversityDAO;
 import dto.TestDto;
 import dto.TestTypes;
 import dto.UserDto;
@@ -26,6 +27,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static config.Utils.getAvailableGroups;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/editor")
@@ -39,6 +42,7 @@ public class EditorServlet {
 
     private final TestService testService;
     private final GroupsDAO groupsDAO;
+    private final UniversityDAO universityDAO;
     private final ObjectMapper objectMapper;
 
     @PostMapping
@@ -48,12 +52,10 @@ public class EditorServlet {
                             HttpSession session,
                             Model model) throws IOException {
         UserDto user = ((SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        List<GroupEntity> groups = user.getGroupEntity().getDepartment().getFaculty().getUniversity().getFaculties().stream()
-                .flatMap(f -> f.getDepartments().stream()
-                        .flatMap(d -> d.getGroups().stream()))
-                .collect(Collectors.toList());
+        List<GroupEntity> groups = getAvailableGroups(user, universityDAO);
         model.addAttribute("groups", objectMapper.writeValueAsString(groups));
-        List<GroupEntity> readedGroups = objectMapper.readValue(groupsJSON, new TypeReference<List<GroupEntity>>(){});
+        List<GroupEntity> readedGroups = objectMapper.readValue(groupsJSON, new TypeReference<List<GroupEntity>>() {
+        });
         List<GroupEntity> testGroups = readedGroups.stream()
                 .map(groupEntity -> groupsDAO.findById(groupEntity.getId()).orElse(null))
                 .collect(Collectors.toList());
@@ -82,10 +84,7 @@ public class EditorServlet {
         UserDto user = ((SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         List<GroupEntity> groups;
         if (user.getGroupEntity() != null) {
-            groups = user.getGroupEntity().getDepartment().getFaculty().getUniversity().getFaculties().stream()
-                    .flatMap(f -> f.getDepartments().stream()
-                            .flatMap(d -> d.getGroups().stream()))
-                    .collect(Collectors.toList());
+            groups = getAvailableGroups(user, universityDAO);
         } else {
             groups = groupsDAO.findAll();
         }
