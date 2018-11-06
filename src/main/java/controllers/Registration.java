@@ -119,7 +119,7 @@ public class Registration {
         boolean need = user.getGroupEntity() == null;
         if (!need) {
             model.addAttribute("needUniver", false);
-            model.addAttribute("faculties", facultyDAO.findAll());
+            model.addAttribute("faculties", facultyDAO.findAllByUniversityId(user.getGroupEntity().getDepartment().getFaculty().getUniversity().getId()));
         } else {
             model.addAttribute("needUniver", true);
             model.addAttribute("universities", universityDAO.findAll());
