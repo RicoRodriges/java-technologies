@@ -12,12 +12,12 @@ html, body {
 .site-content {
     min-height: 100%;
     box-sizing: border-box;
-    padding-bottom: 200px;
+    padding-bottom: 100px;
 }
 
 footer {
-    margin-top: -200px;
-    height: 200px;
+    margin-top: -100px;
+    height: 100px;
     padding: 20px;
     text-align: center;
     box-sizing: border-box;
@@ -38,7 +38,7 @@ header, #theme {
 }
 
 .login-form {
-    margin-top: 200px;
+    margin-top: 100px;
 }
 
 .result-fail {

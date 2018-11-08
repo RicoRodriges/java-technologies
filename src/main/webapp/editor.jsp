@@ -10,7 +10,7 @@
     <script src="/js/jquery.redirect.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#testTheme option[value=${requestScope.test.getType().getName()}]").prop ('selected', true);
+            $("#testTheme").val('${requestScope.test.getType().getName()}');
         });
     </script>
 </head>
@@ -56,50 +56,36 @@
             <button type="submit" class="btn btn-primary create-question-button" onclick="addQuestionField()">
             <fmt:message key="testeditor.addquestion"/>
             </button>
+            <small id="editorWarn" class="form-text text-danger">
             <c:if test="${not empty requestScope.problem}">
                 <c:choose>
                     <c:when test="${requestScope.problem eq 'TEST_EXISTS'}">
-                        <small id="editorWarn" class="form-text text-danger">
                         <fmt:message key="testeditor.testexists"/>
-                        </small>
                     </c:when>
                     <c:when test="${requestScope.problem eq 'TEST_NO_NAME'}">
-                        <small id="editorWarn" class="form-text text-danger">
                         <fmt:message key="testeditor.forgotname"/>
-                        </small>
                     </c:when>
                     <c:when test="${requestScope.problem eq 'EMPTY_QUESTIONS'}">
-                        <small id="editorWarn" class="form-text text-danger">
                         <fmt:message key="testeditor.noquestions"/>
-                        </small>
                     </c:when>
                     <c:when test="${requestScope.problem eq 'QUESTION_EXISTS'}">
-                        <small id="editorWarn" class="form-text text-danger">
                         <fmt:message key="testeditor.duplquest"/>
-                        </small>
                     </c:when>
                     <c:when test="${requestScope.problem eq 'QUESTION_NO_TEXT'}">
-                        <small id="editorWarn" class="form-text text-danger">
                         <fmt:message key="testeditor.emptyquesttext"/>
-                        </small>
                     </c:when>
                     <c:when test="${requestScope.problem eq 'QUESTION_NO_ANSWERS'}">
-                        <small id="editorWarn" class="form-text text-danger">
                         <fmt:message key="testeditor.emptyquest"/>
-                        </small>
                     </c:when>
                     <c:when test="${requestScope.problem eq 'ANSWER_EXISTS'}">
-                        <small id="editorWarn" class="form-text text-danger">
                         <fmt:message key="testeditor.duplans"/>
-                        </small>
                     </c:when>
                     <c:when test="${requestScope.problem eq 'ANSWER_NO_TEXT'}">
-                        <small id="editorWarn" class="form-text text-danger">
                         <fmt:message key="testeditor.emptyans"/>
-                        </small>
                     </c:when>
                 </c:choose>
             </c:if>
+            </small>
             <div class="question-container" id="question-parent">
                 <c:if test="${not empty requestScope.test}">
                     <c:set var="contId" value="1000"/>

@@ -5,7 +5,6 @@ import dao.UniversityDAO;
 import dto.AnswerDto;
 import dto.QuestionDto;
 import dto.TestDto;
-import dto.TestTypes;
 import dto.UserDto;
 import entity.GroupEntity;
 import entity.Test;
@@ -44,10 +43,10 @@ public class TestServiceImpl implements TestService {
         if (!userDto.getIsTutor()) {
             GroupEntity group = userDto.getGroupEntity();
             tests = testDAO.findAllByGroupsIn(Collections.singletonList(group));
-        } else if (userDto.getGroupEntity() == null) {
+        } else if (userDto.getUniversity() == null) {
             tests = new HashSet<>(testDAO.findAll());
         } else {
-            List<GroupEntity> groups = getAvailableGroups(userDto, universityDAO);
+            List<GroupEntity> groups = getAvailableGroups(userDto, universityDAO, null);
             tests = testDAO.findAllByGroupsIn(groups);
         }
         ArrayList<TestDto> testDtos = new ArrayList<>(tests.size());
@@ -55,13 +54,6 @@ public class TestServiceImpl implements TestService {
             testDtos.add(new TestDto(test));
         }
         return testDtos;
-    }
-
-    @Override
-    public List<TestDto> getAllTestsByTheme(TestTypes type, UserDto userDto) {
-        List<TestDto> tests = getAllTests(userDto);
-        tests.removeIf(t -> !t.getType().equals(type));
-        return tests;
     }
 
     @Override

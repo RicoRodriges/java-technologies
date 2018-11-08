@@ -1,7 +1,12 @@
 package controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import config.security.SpringUser;
-import dao.*;
+import dao.DepartmentDAO;
+import dao.FacultyDAO;
+import dao.GroupDAO;
+import dao.UniversityDAO;
 import dto.UserDto;
 import entity.Department;
 import entity.Faculty;
@@ -17,7 +22,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import services.api.UserService;
 
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,10 +42,11 @@ public class Registration {
     private static final String LOCALE = "locale";
 
     private final UserService userService;
-    private final GroupsDAO groupsDAO;
+    private final GroupDAO groupsDAO;
     private final UniversityDAO universityDAO;
     private final FacultyDAO facultyDAO;
     private final DepartmentDAO departmentDAO;
+    private final ObjectMapper objectMapper;
 
     @PostMapping("/registration")
     protected String doPost(@RequestParam(USER) String userNameCred,
@@ -45,7 +54,7 @@ public class Registration {
                             @RequestParam(REPASSWORD) String userRePassCred,
                             @RequestParam(GROUP) Long groupId,
                             HttpSession session,
-                            Model model) {
+                            Model model) throws JsonProcessingException {
         String language = (String) session.getAttribute(LOCALE);
         if (language == null) {
             language = "en";
@@ -54,30 +63,31 @@ public class Registration {
 
         if (isEmptyFields(userNameCred, userPassCred, userRePassCred)) {
             model.addAttribute(FLAG, r.getString("registrationservlet.fill"));
-            return REGISTRATION_JSP;
+            return doGet(model);
         } else {
             Optional<GroupEntity> optional = groupsDAO.findById(groupId);
             if (optional.isPresent()) {
-                UserDto user = new UserDto(null, userNameCred, userPassCred, false, optional.get());
+                UserDto user = new UserDto(null, userNameCred, userPassCred, false, optional.get(), null);
                 if (userService.isAlreadyExists(user)) {
                     model.addAttribute(FLAG, r.getString("registrationservlet.exists"));
-                    return REGISTRATION_JSP;
+                    return doGet(model);
                 } else if (!userPassCred.equals(userRePassCred)) {
                     model.addAttribute(FLAG, r.getString("registrationservlet.wrong"));
-                    return REGISTRATION_JSP;
+                    return doGet(model);
                 } else {
                     userService.registerUser(user);
-                    return LOGIN_JSP;
+                    return "redirect:/" + LOGIN_JSP;
                 }
             } else {
                 model.addAttribute(FLAG, "Bad group");
-                return REGISTRATION_JSP;
+                return doGet(model);
             }
         }
     }
 
     @GetMapping("/registration")
-    protected String doGet() {
+    protected String doGet(Model model) throws JsonProcessingException {
+        model.addAttribute("universities", objectMapper.writeValueAsString(universityDAO.findAll()));
         return REGISTRATION_JSP;
     }
 
@@ -90,13 +100,17 @@ public class Registration {
     @PostMapping("/registerTutor")
     protected String doGetTutorProcess(@RequestParam(USER) String userNameCred,
                                        @RequestParam(PASSWORD) String userPassCred,
-                                       @RequestParam(UNIVERSITY) Long univerId) {
+                                       @RequestParam(UNIVERSITY) Long univerId,
+                                       Model model) {
         University univer = universityDAO.findById(univerId).get();
-        userService.registerUser(new UserDto(null, userNameCred, userPassCred, true, univer.getFaculties()
-                .iterator().next().getDepartments()
-                .iterator().next().getGroups()
-                .iterator().next()));
-        return "redirect:/";
+        UserDto newUser = new UserDto(null, userNameCred, userPassCred, true, null, univer);
+        if (!userService.isAlreadyExists(newUser)) {
+            userService.registerUser(newUser);
+            return "redirect:/";
+        } else {
+            model.addAttribute("error", "User has already existed");
+            return doGetTutorPage(model);
+        }
     }
 
     @GetMapping("/registerUniver")
@@ -106,20 +120,27 @@ public class Registration {
     }
 
     @PostMapping("/registerUniver")
-    protected String doGetUniverProcess(@RequestParam("name") String univerName) {
-        University university = new University();
-        university.setName(univerName);
-        universityDAO.save(university);
-        return "redirect:/";
+    protected String doGetUniverProcess(@RequestParam("name") String univerName,
+                                        Model model) {
+        University byName = universityDAO.findByName(univerName.trim());
+        if (byName == null) {
+            University university = new University();
+            university.setName(univerName.trim());
+            universityDAO.save(university);
+            return "redirect:/";
+        } else {
+            model.addAttribute("error", "University has already existed");
+            return doGetUniverPage(model);
+        }
     }
 
     @GetMapping("/registerGroups")
     protected String doGetGroupPage(Model model) {
         UserDto user = ((SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        boolean need = user.getGroupEntity() == null;
+        boolean need = user.getUniversity() == null;
         if (!need) {
             model.addAttribute("needUniver", false);
-            model.addAttribute("faculties", facultyDAO.findAllByUniversityId(user.getGroupEntity().getDepartment().getFaculty().getUniversity().getId()));
+            model.addAttribute("faculties", facultyDAO.findAllByUniversityId(user.getUniversity().getId()));
         } else {
             model.addAttribute("needUniver", true);
             model.addAttribute("universities", universityDAO.findAll());
@@ -128,35 +149,56 @@ public class Registration {
     }
 
     @PostMapping("/registerGroups")
-    protected String doGetGroupProcess(@RequestParam(value = "univer", required = false) String univer,
+    protected String doGetGroupProcess(@RequestParam(value = "univer", required = false) Long univer,
                                        @RequestParam("fac") String fac,
                                        @RequestParam("dep") String dep,
                                        @RequestParam("group") String gro,
                                        Model model) {
         UserDto user = ((SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         University university;
-        if (user.getGroupEntity() != null)
-            university = universityDAO.findById(user.getGroupEntity().getDepartment().getFaculty().getUniversity().getId()).get();
+        if (user.getUniversity() != null)
+            university = universityDAO.findById(user.getUniversity().getId()).get();
         else {
-            university = universityDAO.findByName(univer);
+            university = universityDAO.findById(univer).get();
         }
 
         GroupEntity groupEntity = new GroupEntity();
-        groupEntity.setName(gro);
+        groupEntity.setName(gro.trim());
 
-        Department d = departmentDAO.findByName(dep);
-        if (d == null) {
-            d = new Department();
-            d.setName(dep);
-            d.setGroups(new HashSet<>());
-        }
-
-        Faculty f = facultyDAO.findByName(fac);
+        Faculty f = facultyDAO.findAllByUniversityId(university.getId()).stream()
+                .filter(fa -> fa.getName().equalsIgnoreCase(fac.trim()))
+                .findFirst().orElse(null);
         if (f == null) {
             f = new Faculty();
-            f.setName(fac);
+            f.setName(fac.trim());
             f.setUniversity(university);
             f.setDepartments(new HashSet<>());
+        }
+
+        Department d;
+        if (f.getId() == null) {
+            d = new Department();
+            d.setName(dep.trim());
+            d.setGroups(new HashSet<>());
+        } else {
+            d = departmentDAO.findAllByFacultyId(f.getId()).stream()
+                    .filter(de -> de.getName().equalsIgnoreCase(dep.trim()))
+                    .findFirst().orElse(null);
+            if (d == null) {
+                d = new Department();
+                d.setName(dep.trim());
+                d.setGroups(new HashSet<>());
+            }
+        }
+
+        if (d.getId() != null) {
+            GroupEntity entity = groupsDAO.findAllByDepartmentId(d.getId()).stream()
+                    .filter(gr -> gr.getName().equalsIgnoreCase(gro.trim()))
+                    .findFirst().orElse(null);
+            if (entity != null) {
+                model.addAttribute("error", "Group has already existed");
+                return doGetGroupPage(model);
+            }
         }
 
         groupEntity.setDepartment(d);

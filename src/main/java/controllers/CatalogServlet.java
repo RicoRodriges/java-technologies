@@ -25,27 +25,14 @@ public class CatalogServlet {
     private final TestService testService;
 
     @GetMapping
-    protected String doGet(@RequestParam(name = "theme", required = false) String theme, Model model) {
-        List<TestDto> tests = Collections.emptyList();
+    protected String doGet(Model model) {
         UserDto user = ((SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        if (theme == null || "All".equals(theme)) {
-            tests = testService.getAllTests(user);
-            model.addAttribute("theme", "All");
-        } else {
-            for (TestTypes type : TestTypes.values()) {
-                if (type.getName().equals(theme)) {
-                    tests = testService.getAllTestsByTheme(type, user);
-                    break;
-                }
-            }
-            model.addAttribute("theme", theme);
-        }
-        model.addAttribute("tests", tests);
+        model.addAttribute("tests", testService.getAllTests(user));
         return "catalog";
     }
 
     @PostMapping
-    protected String doPost(@RequestParam(name = "theme", required = false) String theme, Model model) {
-        return doGet(theme, model);
+    protected String doPost(Model model) {
+        return doGet(model);
     }
 }

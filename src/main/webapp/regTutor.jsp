@@ -4,7 +4,7 @@
 <html>
 <head>
     <%@ include file="parts/head.jsp" %>
-    <title>Register Tutor</title>
+    <title>Register teacher</title>
 
     <script src="/js/onePageEditor.js"></script>
     <script src="/js/jquery.redirect.js"></script>
@@ -12,27 +12,46 @@
 </head>
 <body>
 
-    <fmt:message key="catalog.tts" var="headerTitle" />
-    <fmt:message key="catalog.description" var="headerDesc" />
-    <%@ include file="parts/header.jsp" %>
+<fmt:message key="catalog.tts" var="headerTitle"/>
+<fmt:message key="catalog.description" var="headerDesc"/>
+<%@ include file="parts/header.jsp" %>
 
-    <main role="main" class="container">
-        <form method="post">
-            <input name="user" placeholder="Enter tutor email"><br>
-            <input name="password" placeholder="Enter tutor password"><br>
-            <label>
-                <select name="univer">
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <form method="post" class="col-md-6" onsubmit="return onSubmitRegisterTeacher()">
+            <c:if test="${requestScope.error != null}">
+                <div style="color:red;">${requestScope.error}</div>
+            </c:if>
+            <div class="form-group">
+                <label for="user">Teacher name</label>
+                <input type="email" class="form-control" id="user" name="user"
+                       placeholder="Enter teacher email">
+                <small id="userMessage" class="form-text"></small>
+            </div>
+            <div class="form-group">
+                <label for="password">Teacher name</label>
+                <input type="password" class="form-control" id="password" name="password"
+                       placeholder="Enter teacher password">
+                <small id="passwordMessage" class="form-text"></small>
+            </div>
+            <div class="form-group">
+                <label for="univer">University</label>
+                <select name="univer" class="form-control" id="univer">
                     <option value=""></option>
                     <c:forEach items="${requestScope.universities}" var="q">
                         <option value="${q.id}">${q.name}</option>
                     </c:forEach>
                 </select>
-            </label><br>
-            <input type="submit" value="Submit">
+                <small id="univerMessage" class="form-text"></small>
+            </div>
+            <button type="submit" class="btn btn-primary"><fmt:message key="registration.register"/></button>
         </form>
-    </main>
+        <div class="col-md-3"></div>
+    </div>
+</main>
 
-    <%@ include file="parts/footer.jsp" %>
+<%@ include file="parts/footer.jsp" %>
 
 </body>
 </html>

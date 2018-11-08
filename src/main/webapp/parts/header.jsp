@@ -16,15 +16,15 @@
                     <c:when test="${user.getUser().getIsTutor()}">
 
                         <div class="btn-group">
-                            <c:if test="${user.getUser().getGroupEntity() == null}">
+                            <c:if test="${user.getUser().getUniversity() == null}">
                                 <div><a href="/registerTutor" class="btn btn-primary">
-                                    Register tutor
+                                    Register teacher
                                 </a></div>
                                 <div><a href="/registerUniver" class="btn btn-primary">
                                     Register universities
                                 </a></div>
                             </c:if>
-                            <c:if test="${user.getUser().getGroupEntity() != null}">
+                            <c:if test="${user.getUser().getUniversity() != null}">
                                 <div><a href="/editor" class="btn btn-primary">
                                 <fmt:message key="catalog.createtest"/>
                                 </a></div>

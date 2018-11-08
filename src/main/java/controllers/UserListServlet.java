@@ -32,8 +32,8 @@ public class UserListServlet {
     protected String doGet(Model model) {
         UserDto user = ((SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         List<UserDto> users = userService.getAll();
-        if (user.getGroupEntity() != null) {
-            Set<Long> groups = getAvailableGroups(user, universityDAO).stream()
+        if (user.getUniversity() != null) {
+            Set<Long> groups = getAvailableGroups(user, universityDAO, null).stream()
                     .map(GroupEntity::getId)
                     .collect(Collectors.toSet());
             users = users.stream()

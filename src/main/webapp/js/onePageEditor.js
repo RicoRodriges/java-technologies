@@ -194,7 +194,7 @@ function deleteAnswer(id) {
 
 function biuldTest() {
     var test = {};
-    test.name = $("#testNameInput").val();
+    test.name = $("#testNameInput").val().trim();
     test.type = $("#testTheme").val();
     test.quest = [];
     var questions = $(".question");
@@ -206,12 +206,12 @@ function biuldTest() {
 
         console.log(question.getElementsByClassName("question-text")[0].value);
 
-        newQuestion.Qtext = question.getElementsByClassName("question-text")[0].value;
+        newQuestion.Qtext = question.getElementsByClassName("question-text")[0].value.trim();
         newQuestion.answers = [];
         var answerGroups = question.getElementsByClassName("answer-container")[0].getElementsByClassName("answer-group");
         Array.from(answerGroups).forEach(function (answer) {
             var newAnswer = {};
-            newAnswer.Atext = answer.getElementsByClassName("answer-text")[0].value;
+            newAnswer.Atext = answer.getElementsByClassName("answer-text")[0].value.trim();
             newAnswer.isRight = answer.getElementsByClassName("form-check-input")[0].checked;
             newQuestion.answers.push(newAnswer);
         });
@@ -220,6 +220,19 @@ function biuldTest() {
 
     console.log(test);
 
-    $.redirect("/editor", {test: JSON.stringify(test), groups: JSON.stringify(appVue.$data.value)}, "POST");
+    var group = appVue.$data.value;
+    if (group != null && group.length > 0) {
+        test.groups = group;
+    }
+    var errors = onSubmitEditTest(test);
+    if (errors.length < 1) {
+        $.redirect("/editor", {test: JSON.stringify(test)}, "POST");
+    } else {
+        var str = "";
+        for (var i = 0; i < errors.length; i++) {
+            str += errors[i] + "<br>";
+        }
+        $("#editorWarn").html(str);
+    }
 }
 

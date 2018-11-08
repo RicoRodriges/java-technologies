@@ -1,7 +1,6 @@
 package services.api;
 
 import dto.TestDto;
-import dto.TestTypes;
 import dto.UserDto;
 import services.impl.EditorStatus;
 
@@ -12,8 +11,6 @@ public interface TestService {
     TestDto getTest(Long id);
 
     List<TestDto> getAllTests(UserDto userDto);
-
-    List<TestDto> getAllTestsByTheme(TestTypes type, UserDto userDto);
 
     void removeTest(Long id);
 

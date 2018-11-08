@@ -23,6 +23,7 @@
 
 <link rel="stylesheet" href="/css/style.css">
 <script src="/js/changeLanguage.js"></script>
+<script src="/js/validation.js"></script>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

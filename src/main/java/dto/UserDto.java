@@ -1,6 +1,7 @@
 package dto;
 
 import entity.GroupEntity;
+import entity.University;
 import entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +14,7 @@ public class UserDto {
     private String password;
     private Boolean isTutor;
     private GroupEntity groupEntity;
+    private University university;
 
     public UserDto(User user) {
         this.id = user.getId();
@@ -20,5 +22,6 @@ public class UserDto {
         this.password = user.getPassword();
         this.isTutor = user.getIsTutor();
         this.groupEntity = user.getGroup();
+        this.university = user.getUniversity();
     }
 }

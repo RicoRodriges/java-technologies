@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import config.security.SpringUser;
-import dao.GroupsDAO;
+import dao.GroupDAO;
 import dao.UniversityDAO;
 import dto.TestDto;
 import dto.TestTypes;
@@ -41,31 +41,27 @@ public class EditorServlet {
     private static final String TEST_ID = "testId";
 
     private final TestService testService;
-    private final GroupsDAO groupsDAO;
+    private final GroupDAO groupsDAO;
     private final UniversityDAO universityDAO;
     private final ObjectMapper objectMapper;
 
     @PostMapping
     @Transactional
     protected String doPost(@RequestParam(TEST) TestDto editableTest,
-                            @RequestParam("groups") String groupsJSON,
                             HttpSession session,
                             Model model) throws IOException {
         UserDto user = ((SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        List<GroupEntity> groups = getAvailableGroups(user, universityDAO);
+        List<GroupEntity> groups = getAvailableGroups(user, universityDAO, groupsDAO);
         model.addAttribute("groups", objectMapper.writeValueAsString(groups));
-        List<GroupEntity> readedGroups = objectMapper.readValue(groupsJSON, new TypeReference<List<GroupEntity>>() {
-        });
-        List<GroupEntity> testGroups = readedGroups.stream()
+        editableTest.setGroups(editableTest.getGroups().stream()
                 .map(groupEntity -> groupsDAO.findById(groupEntity.getId()).orElse(null))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
         Long testId = (Long) session.getAttribute(TEST_ID);
         if (testId != null) {
             editableTest.setId(testId);
         } else {
             editableTest.setId(null);
         }
-        editableTest.setGroups(testGroups);
         EditorStatus result = changeTest(editableTest);
         if (result == EditorStatus.OK) {
             session.removeAttribute(TEST_ID);
@@ -82,12 +78,7 @@ public class EditorServlet {
                            HttpSession session,
                            Model model) throws JsonProcessingException {
         UserDto user = ((SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        List<GroupEntity> groups;
-        if (user.getGroupEntity() != null) {
-            groups = getAvailableGroups(user, universityDAO);
-        } else {
-            groups = groupsDAO.findAll();
-        }
+        List<GroupEntity> groups = getAvailableGroups(user, universityDAO, groupsDAO);
         model.addAttribute("groups", objectMapper.writeValueAsString(groups));
         if (testID != null) {
             TestDto test = testService.getTest(testID);

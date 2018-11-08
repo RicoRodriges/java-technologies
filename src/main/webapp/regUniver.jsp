@@ -17,16 +17,34 @@
 <%@ include file="parts/header.jsp" %>
 
 <main role="main" class="container">
-    <form method="post">
-        <input name="name" placeholder="Enter university name"><br>
-        <input type="submit" value="Create">
-    </form>
-    Universities:
-    <ul>
-        <c:forEach items="${requestScope.universities}" var="q">
-            <li>${q.name}</li>
-        </c:forEach>
-    </ul>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <form method="post" class="col-md-6" onsubmit="return onSubmitRegisterUniver()">
+            <c:if test="${requestScope.error != null}">
+                <div style="color:red;">${requestScope.error}</div>
+            </c:if>
+            <div class="form-group">
+                <label for="name">University name</label>
+                <input type="text" class="form-control" id="name" name="name"
+                       placeholder="Enter university name">
+                <small id="nameMessage" class="form-text"></small>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            Universities:
+            <ul class="list-group list-group-flush">
+                <c:forEach items="${requestScope.universities}" var="q">
+                    <li class="list-group-item">${q.name}</li>
+                </c:forEach>
+            </ul>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
 </main>
 
 <%@ include file="parts/footer.jsp" %>

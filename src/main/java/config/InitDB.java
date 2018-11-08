@@ -2,7 +2,11 @@ package config;
 
 import dao.UniversityDAO;
 import dao.UserDAO;
-import entity.*;
+import entity.Department;
+import entity.Faculty;
+import entity.GroupEntity;
+import entity.University;
+import entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -26,7 +30,7 @@ public class InitDB {
     @Transactional
     public void init(ContextRefreshedEvent event) {
         if (!isInit) {
-            User user = new User(tutorName, tutorPassword, true, null);
+            User user = new User(tutorName, tutorPassword, true, null, null);
             user.setId(1L);
             userDAO.save(user);
 
@@ -55,10 +59,7 @@ public class InitDB {
             g3373.setDepartment(is);
             g3374.setDepartment(is);
 
-            University itmo = new University();
-            itmo.setName("ИТМО");
-
-            universityDAO.saveAll(Arrays.asList(leti, itmo));
+            universityDAO.saveAll(Collections.singletonList(leti));
             isInit = true;
         }
     }

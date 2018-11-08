@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,10 @@ public class StatisticServlet {
     protected String doGet(Model model) {
         SpringUser springUser = (SpringUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDto user = springUser.getUser();
-        University university = user.getGroupEntity().getDepartment().getFaculty().getUniversity();
+        University university = user.getUniversity();
+        if (university == null) {
+            return "redirect:/catalog";
+        }
         List<TestResult> results = testResultDAO.findAll().stream()
                 .filter(r -> r.getUser().getGroup().getDepartment().getFaculty().getUniversity().getId().equals(university.getId()))
                 .collect(Collectors.toList());
@@ -47,7 +51,7 @@ public class StatisticServlet {
             objectNode.put("group", result.getUser().getGroup().getName());
             objectNode.put("result", result.getCorrectAnswers() + " / " + result.getCountAnswers());
             objectNode.put("perc", (100 * result.getCorrectAnswers() / result.getCountAnswers()) + " %");
-            objectNode.put("date", result.getDate().toString());
+            objectNode.put("date", result.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             arrayNode.add(objectNode);
         }
         model.addAttribute("jsonData", arrayNode.toString());

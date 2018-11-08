@@ -23,12 +23,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/css/**", "/js/**", "/images/**", "/registration", "/login", "/universities").permitAll()
-                .antMatchers("/editor", "/delete", "/userList").access("hasRole(\"" + UserRole.ADMIN.toString() + "\")")
+                .antMatchers("/registerTutor", "/registerUniver").access("hasRole(\"" + UserRole.ADMIN.toString() + "\")")
+                .antMatchers("/editor", "/delete", "/userList", "/stat", "/registerGroups").access("hasRole(\"" + UserRole.TEACHER.toString() + "\")")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").loginProcessingUrl("/login").usernameParameter("user").passwordParameter("password").successForwardUrl("/catalog")
+                .formLogin().loginPage("/login").usernameParameter("user").passwordParameter("password")
                 .and()
-                .logout().invalidateHttpSession(true).logoutUrl("/logout").logoutSuccessUrl("/login");
+                .logout().invalidateHttpSession(true).logoutUrl("/logout").logoutSuccessUrl("/login")
+                .and()
+                .exceptionHandling().accessDeniedHandler((req, resp, ex) -> req.getRequestDispatcher("forbidden.jsp").forward(req, resp));
     }
 
     @Override

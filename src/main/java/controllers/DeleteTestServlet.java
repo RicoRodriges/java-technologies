@@ -10,7 +10,7 @@ import services.api.TestService;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/delete")
-public class deleteTestServlet {
+public class DeleteTestServlet {
 
     private static final String ID = "id";
 

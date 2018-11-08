@@ -1,8 +1,10 @@
 package config;
 
+import dao.GroupDAO;
 import dao.UniversityDAO;
 import dto.UserDto;
 import entity.GroupEntity;
+import entity.University;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,11 +18,16 @@ public class Utils {
         return localDateTime.format(formatter);
     }
 
-    public static List<GroupEntity> getAvailableGroups(UserDto user, UniversityDAO universityDAO) {
-        Long universityId = user.getGroupEntity().getDepartment().getFaculty().getUniversity().getId();
-        return universityDAO.findById(universityId).get().getFaculties().stream()
-                .flatMap(f -> f.getDepartments().stream()
-                        .flatMap(d -> d.getGroups().stream()))
-                .collect(Collectors.toList());
+    public static List<GroupEntity> getAvailableGroups(UserDto user, UniversityDAO universityDAO, GroupDAO groupDAO) {
+        University university = user.getUniversity();
+        if (university == null) {
+            return groupDAO.findAll();
+        } else {
+            Long universityId = university.getId();
+            return universityDAO.findById(universityId).get().getFaculties().stream()
+                    .flatMap(f -> f.getDepartments().stream()
+                            .flatMap(d -> d.getGroups().stream()))
+                    .collect(Collectors.toList());
+        }
     }
 }
