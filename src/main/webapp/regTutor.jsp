@@ -24,19 +24,19 @@
                 <div style="color:red;">${requestScope.error}</div>
             </c:if>
             <div class="form-group">
-                <label for="user">Teacher name</label>
+                <label for="user"><fmt:message key="reg.teachername"/></label>
                 <input type="email" class="form-control" id="user" name="user"
-                       placeholder="Enter teacher email">
+                       placeholder="<fmt:message key="registration.enteremail"/>">
                 <small id="userMessage" class="form-text"></small>
             </div>
             <div class="form-group">
-                <label for="password">Teacher name</label>
+                <label for="password"><fmt:message key="reg.teacherpassword"/></label>
                 <input type="password" class="form-control" id="password" name="password"
-                       placeholder="Enter teacher password">
+                       placeholder="<fmt:message key="registration.enterpassword"/>">
                 <small id="passwordMessage" class="form-text"></small>
             </div>
             <div class="form-group">
-                <label for="univer">University</label>
+                <label for="univer"><fmt:message key="stat.university"/></label>
                 <select name="univer" class="form-control" id="univer">
                     <option value=""></option>
                     <c:forEach items="${requestScope.universities}" var="q">

@@ -14,8 +14,8 @@
 
         <div class="error">
             <h1>403</h1>
-            <h2>Sorry, request is denied</h2>
-            <a href="/catalog">Go home</a>
+            <h2><fmt:message key="error.deny"/></h2>
+            <a href="/catalog"><fmt:message key="error.home"/></a>
         </div>
 
     <%@ include file="parts/footer.jsp" %>

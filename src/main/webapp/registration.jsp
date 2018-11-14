@@ -81,7 +81,7 @@
     Vue.component('choose-group', {
         props: ['groups'],
         template: '<div class="form-group">\n' +
-            '           <label for="groups">Group: </label>\n' +
+            '           <label for="groups"><fmt:message key="stat.group" />: </label>\n' +
             '           <select id="groups" class="form-control" name="groups" id="groups"><option value=""/>' +
             '               <option v-for="group in groups"' +
             '                       v-bind:value="group.id">{{ group.name }}</option>' +
@@ -92,7 +92,7 @@
     Vue.component('choose-department', {
         props: ['departments'],
         template: '<div><div class="form-group">\n' +
-            '           <label for="departments">Department: </label>\n' +
+            '           <label for="departments"><fmt:message key="stat.department" />: </label>\n' +
             '           <select id="departments" class="form-control" name="departments" v-model="selectedDepartment"><option value="[]"/>' +
             '               <option v-for="dep in departments"' +
             '                       v-bind:value="JSON.stringify(dep.groups)">{{ dep.name }}</option>' +
@@ -109,7 +109,7 @@
     Vue.component('choose-faculty', {
         props: ['faculties'],
         template: '<div><div class="form-group">\n' +
-            '           <label for="faculty">Faculty: </label>\n' +
+            '           <label for="faculty"><fmt:message key="stat.faculty" />: </label>\n' +
             '           <select id="faculty" class="form-control" name="faculty" v-model="selectedFaculty"><option value="[]"/>' +
             '               <option v-for="fac in faculties"' +
             '                       v-bind:value="JSON.stringify(fac.departments)">{{ fac.name }}</option>' +
@@ -129,7 +129,7 @@
             '            <div class="col-md-3"></div>\n' +
             '            <div class="col-md-6">\n' +
             '                <div class="form-group">\n' +
-            '                    <label for="university">University: </label>\n' +
+            '                    <label for="university"><fmt:message key="stat.university" />: </label>\n' +
             '                    <select id="university" class="form-control" name="university" v-model="selectedUni">' +
             '                        <option value="[]"/>' +
             '                        <option v-for="uni in universities"' +

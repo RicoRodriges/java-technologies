@@ -36,7 +36,7 @@
             </select>
 
             <div id="vue-group">
-                <label>Choose groups</label>
+                <label><fmt:message key="testeditor.choosegroup"/></label>
                 <vue-multiselect v-model="value" placeholder="Search a group" label="name" track-by="id" :options="options" :multiple="true"></vue-multiselect>
                 <input id="groups" type="hidden" v-bind:value="JSON.stringify(value)" name="groups"/>
             </div>

@@ -36,7 +36,12 @@ public class ProfileServlet {
             return displayUserTests(user, model);
         } else {
             if (user.getIsTutor()) {
-                return displayUserTests(userService.get(username), model);
+                UserDto requstedUser = userService.get(username);
+                if (requstedUser.getGroupEntity() != null &&
+                        requstedUser.getGroupEntity().getDepartment().getFaculty().getUniversity().getId().equals(user.getUniversity().getId())) {
+                    return displayUserTests(requstedUser, model);
+                }
+                return "forbidden";
             } else {
                 return "forbidden";
             }

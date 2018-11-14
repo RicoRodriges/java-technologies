@@ -25,7 +25,7 @@
             </c:if>
             <c:if test="${requestScope.needUniver}">
                 <div class="form-group">
-                    <label for="univer">University:</label>
+                    <label for="univer"><fmt:message key="stat.university"/>:</label>
                     <select name="univer" id="univer" class="form-control">
                         <option value=""></option>
                         <c:forEach items="${requestScope.universities}" var="un">
@@ -37,31 +37,30 @@
             </c:if>
 
             <div class="form-group">
-                <label for="fac">Faculty:</label>
-                <input name="fac" id="fac" placeholder="Enter faculty name" class="form-control">
+                <label for="fac"><fmt:message key="stat.faculty"/>:</label>
+                <input name="fac" id="fac" placeholder="<fmt:message key="reg.enterfaculty"/>" class="form-control">
                 <small id="facMessage" class="form-text"></small>
             </div>
 
             <div class="form-group">
-                <label for="dep">Department:</label>
-                <input name="dep" id="dep" placeholder="Enter department name" class="form-control">
+                <label for="dep"><fmt:message key="stat.department"/>:</label>
+                <input name="dep" id="dep" placeholder="<fmt:message key="reg.enterdepartment"/>" class="form-control">
                 <small id="depMessage" class="form-text"></small>
             </div>
 
             <div class="form-group">
-                <label for="group">Group:</label>
-                <input name="group" id="group" placeholder="Enter group name" class="form-control">
+                <label for="group"><fmt:message key="stat.group"/>:</label>
+                <input name="group" id="group" placeholder="<fmt:message key="reg.entergroup"/>" class="form-control">
                 <small id="groupMessage" class="form-text"></small>
             </div>
 
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary"><fmt:message key="registration.register"/></button>
         </form>
         <div class="col-md-3"></div>
     </div>
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            Hierarchy:
             <ul class="list-group list-group-flush">
                 <c:if test="${!requestScope.needUniver}">
                     <c:forEach items="${requestScope.faculties}" var="q">

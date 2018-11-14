@@ -18,10 +18,10 @@
                         <div class="btn-group">
                             <c:if test="${user.getUser().getUniversity() == null}">
                                 <div><a href="/registerTutor" class="btn btn-primary">
-                                    Register teacher
+                                    <fmt:message key="catalog.registerteacher"/>
                                 </a></div>
                                 <div><a href="/registerUniver" class="btn btn-primary">
-                                    Register universities
+                                    <fmt:message key="catalog.registeruniversity"/>
                                 </a></div>
                             </c:if>
                             <c:if test="${user.getUser().getUniversity() != null}">
@@ -29,11 +29,11 @@
                                 <fmt:message key="catalog.createtest"/>
                                 </a></div>
                                 <div><a href="/stat" class="btn btn-primary">
-                                    Statistics
+                                    <fmt:message key="catalog.statistics"/>
                                 </a></div>
                             </c:if>
                             <div><a href="/registerGroups" class="btn btn-primary">
-                                Register groups
+                                <fmt:message key="catalog.registergroup"/>
                             </a></div>
                             <div><a href="/userList" class="btn btn-primary">
                                 <fmt:message key="catalog.userspage"/>

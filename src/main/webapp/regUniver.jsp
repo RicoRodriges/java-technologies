@@ -24,19 +24,19 @@
                 <div style="color:red;">${requestScope.error}</div>
             </c:if>
             <div class="form-group">
-                <label for="name">University name</label>
+                <label for="name"><fmt:message key="reg.universityname"/></label>
                 <input type="text" class="form-control" id="name" name="name"
-                       placeholder="Enter university name">
+                       placeholder="<fmt:message key="reg.enteruniversityname"/>">
                 <small id="nameMessage" class="form-text"></small>
             </div>
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary"><fmt:message key="registration.register" /></button>
         </form>
         <div class="col-md-3"></div>
     </div>
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
-            Universities:
+            <fmt:message key="reg.universities"/>
             <ul class="list-group list-group-flush">
                 <c:forEach items="${requestScope.universities}" var="q">
                     <li class="list-group-item">${q.name}</li>

@@ -26,68 +26,68 @@
             data: {
                 columns: [
                     {
-                        label: 'Test',
+                        label: '<fmt:message key="profile.test"/>',
                         field: 'test',
                         filterOptions: {
                             enabled: true
                         }
                     },
                     {
-                        label: 'User',
+                        label: '<fmt:message key="stat.user"/>',
                         field: 'user',
                         filterOptions: {
                             enabled: true
                         }
                     },
                     {
-                        label: 'University',
+                        label: '<fmt:message key="stat.university"/>',
                         field: 'univer',
                         filterOptions: {
                             enabled: true
                         }
                     },
                     {
-                        label: 'Faculty',
+                        label: '<fmt:message key="stat.faculty"/>',
                         field: 'fac',
                         filterOptions: {
                             enabled: true
                         }
                     },
                     {
-                        label: 'Department',
+                        label: '<fmt:message key="stat.department"/>',
                         field: 'dep',
                         filterOptions: {
                             enabled: true
                         }
                     },
                     {
-                        label: 'Group',
+                        label: '<fmt:message key="stat.group"/>',
                         field: 'group',
                         filterOptions: {
                             enabled: true
                         }
                     },
                     {
-                        label: 'Result',
+                        label: '<fmt:message key="profile.result"/>',
                         field: 'result',
                         filterOptions: {
                             enabled: false
                         }
                     },
                     {
-                        label: 'Percentage',
+                        label: '<fmt:message key="profile.percentage"/>',
                         field: 'perc',
                         filterOptions: {
                             enabled: true
                         }
                     },
                     {
-                        label: 'Date',
+                        label: '<fmt:message key="profile.date"/>',
                         field: 'date',
                         filterOptions: {
                             enabled: true
                         }
-                    },
+                    }
                 ],
                 rows: ${requestScope.jsonData}
             }
